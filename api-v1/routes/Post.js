@@ -1,7 +1,7 @@
 const router = require("express").Router()
 const multer = require("multer")
 
-const Post = require("../models/Post")
+const Post = require("../models/post")
 const auth = require("../middleware/auth")
 const uploadToBunny = require("../utils/bunny")
 
