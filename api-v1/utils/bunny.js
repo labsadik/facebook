@@ -3,7 +3,7 @@ const axios = require("axios")
 async function uploadToBunny(file) {
   const storageZone = process.env.BUNNY_STORAGE_ZONE
   const accessKey = process.env.BUNNY_API_KEY
-  const folder = "pinterest"
+  const folder = "YT"
 
   // 🔥 REMOVE SPECIAL CHARS (IMPORTANT)
   const cleanName = file.originalname.replace(/[^\w.\-]/g, "_")

@@ -3,209 +3,180 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pinterest Feed</title>
+<title>Facebook | Social Network</title>
 
 <link rel="preconnect" href="https://cdn.tailwindcss.com">
-<link rel="preconnect" href="https://cdnjs.cloudflare.com">
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
 :root {
-  --primary: #E60023;
-  --primary-hover: #AD081B;
-  --bg-main: #F0F0F0;
+  --fb-blue: #1877F2;
+  --fb-blue-hover: #166FE5;
+  --fb-blue-light: #E7F3FF;
+  --bg-primary: #F0F2F5;
   --bg-white: #FFFFFF;
-  --text-dark: #111111;
-  --text-gray: #5F5F5F;
-  --text-light: #767676;
-  --border-color: #DDDDDD;
-  --success: #00C853;
-  --error: #DC2626;
-  --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
-  --shadow-md: 0 4px 16px rgba(0,0,0,0.12);
-  --shadow-lg: 0 8px 32px rgba(0,0,0,0.18);
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
-  --transition-fast: all 0.15s ease;
-  --transition-normal: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --text-primary: #050505;
+  --text-secondary: #65676B;
+  --text-muted: #8A8D91;
+  --border-light: #DADDE1;
+  --border-input: #CCD0D5;
+  --success: #31A24C;
+  --success-bg: #E7F6EC;
+  --error: #FA383E;
+  --error-bg: #FFF3F3;
+  --shadow-xs: 0 1px 2px rgba(0,0,0,0.08);
+  --shadow-sm: 0 2px 4px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.15);
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-xxl: 20px;
+  --radius-full: 50%;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  background: var(--bg-main);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
   line-height: 1.5;
-  color: var(--text-dark);
+  font-size: 16px;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { 
-  background: var(--border-color); 
-  border-radius: 20px;
-  transition: background 0.2s;
-}
-::-webkit-scrollbar-thumb:hover { background: var(--text-gray); }
+::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: var(--radius-full); }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
 
-/* Header Styles */
+::selection { background-color: var(--fb-blue-light); color: var(--fb-blue); }
+:focus-visible { outline: 2px solid var(--fb-blue); outline-offset: 2px; }
+
+/* Header */
 .header {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
-  background: rgba(255,255,255,0.95);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  padding: 0.75rem 2rem;
+  height: 56px;
+  background: var(--bg-white);
+  box-shadow: var(--shadow-xs);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1.5rem;
-  border-bottom: 1px solid rgba(0,0,0,0.06);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  padding: 0 16px;
 }
 
-.logo {
-  font-size: 1.75rem;
-  color: var(--primary);
+.header-left { display: flex; align-items: center; gap: 8px; }
+
+.logo-fb {
+  font-size: 28px;
+  color: var(--fb-blue);
   cursor: pointer;
-  transition: transform 0.2s;
-  flex-shrink: 0;
+  transition: transform 0.15s ease;
 }
-.logo:hover { transform: scale(1.05); }
+.logo-fb:hover { transform: scale(1.05); }
 
-.search-container {
-  flex: 1;
-  max-width: 700px;
-  position: relative;
-}
+.search-wrapper { position: relative; width: 240px; }
+@media(min-width:768px) { .search-wrapper { width: 280px; } }
 
-.search-input {
-  width: 100%;
-  padding: 0.875rem 3.25rem 0.875rem 1.25rem;
-  border-radius: 24px;
-  border: none;
-  background: var(--bg-main);
-  font-size: 0.9375rem;
-  outline: none;
-  transition: var(--transition-normal);
-}
-.search-input:focus {
-  background: white;
-  box-shadow: 0 0 0 3px rgba(230, 0, 35, 0.12), var(--shadow-sm);
-}
-.search-input::placeholder { color: var(--text-light); }
-
-.search-btn {
+.search-icon-left {
   position: absolute;
-  right: 1rem;
+  left: 14px;
   top: 50%;
   transform: translateY(-50%);
-  background: var(--primary);
-  color: white;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.875rem;
-  transition: var(--transition-fast);
-}
-.search-btn:hover { 
-  background: var(--primary-hover);
-  transform: translateY(-50%) scale(1.05);
+  color: var(--text-muted);
+  font-size: 14px;
+  pointer-events: none;
 }
 
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  flex-shrink: 0;
+.search-input-field {
+  width: 100%;
+  height: 40px;
+  padding: 0 16px 0 42px;
+  border-radius: var(--radius-xxl);
+  border: none;
+  background: var(--bg-primary);
+  font-size: 15px;
+  color: var(--text-primary);
+  transition: all 0.25s ease;
+}
+.search-input-field::placeholder { color: var(--text-muted); }
+.search-input-field:focus {
+  background: var(--bg-white);
+  box-shadow: 0 0 0 2px var(--fb-blue), var(--shadow-sm);
 }
 
-.icon-btn {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: none;
-  background: transparent;
-  color: var(--text-dark);
-  font-size: 1.125rem;
-  cursor: pointer;
+.header-right { display: flex; align-items: center; gap: 4px; }
+
+.nav-btn {
   position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  border: none;
+  background: #E4E6EB;
+  color: var(--text-primary);
+  font-size: 18px;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: var(--transition-fast);
+  transition: all 0.15s ease;
 }
-.icon-btn:hover { background: var(--bg-main); }
-.icon-btn:active { transform: scale(0.95); }
+.nav-btn:hover { background: #D8DADF; }
+.nav-btn:active { transform: scale(0.95); }
 
-.notification-badge {
+.nav-badge {
   position: absolute;
-  top: 7px;
-  right: 7px;
-  width: 9px;
-  height: 9px;
-  background: var(--primary);
-  border-radius: 50%;
-  border: 2px solid white;
-  animation: pulse 2s infinite;
-}
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
+  top: 6px;
+  right: 6px;
+  width: 8px;
+  height: 8px;
+  background: var(--error);
+  border-radius: var(--radius-full);
+  border: 2px solid var(--bg-white);
 }
 
-.user-avatar {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
+.user-avatar-nav {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 14px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: var(--transition-fast);
+  transition: all 0.15s ease;
   border: 2px solid transparent;
 }
-.user-avatar:hover {
-  border-color: white;
-  box-shadow: var(--shadow-sm);
-  transform: scale(1.05);
-}
+.user-avatar-nav:hover { border-color: var(--fb-blue); }
 
 .dropdown-menu {
   position: absolute;
-  top: calc(100% + 12px);
+  top: calc(100% + 8px);
   right: 0;
-  background: white;
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-lg);
   min-width: 240px;
-  padding: 0.5rem;
+  background: var(--bg-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: 8px 0;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(-8px) scale(0.96);
-  transition: var(--transition-normal);
+  transform: translateY(-10px) scale(0.96);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 1100;
 }
 .dropdown-menu.active {
@@ -214,202 +185,319 @@ body {
   transform: translateY(0) scale(1);
 }
 
-.menu-item {
+.dropdown-item {
   display: flex;
   align-items: center;
-  gap: 0.875rem;
-  padding: 0.875rem 1rem;
+  gap: 12px;
+  padding: 10px 16px;
   cursor: pointer;
-  color: var(--text-dark);
-  font-size: 0.9375rem;
-  border-radius: var(--radius-sm);
-  transition: var(--transition-fast);
+  color: var(--text-primary);
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.15s ease;
 }
-.menu-item:hover { background: var(--bg-main); }
-.menu-item i { width: 20px; text-align: center; color: var(--text-gray); }
+.dropdown-item:hover { background: var(--bg-primary); }
+.dropdown-item i { width: 20px; text-align: center; color: var(--text-secondary); font-size: 16px; }
 
-.menu-divider {
-  height: 1px;
-  background: var(--border-color);
-  margin: 0.5rem 0;
-}
+.dropdown-divider { height: 1px; background: var(--border-light); margin: 8px 0; }
+.dropdown-item-danger { color: var(--error); }
+.dropdown-item-danger i { color: var(--error); }
 
-.danger-item { color: var(--error); font-weight: 500; }
-.danger-item i { color: var(--error); }
-
-/* Main Content */
-.main-content {
-  margin-top: 80px;
-  padding: 1.5rem 2rem;
-  max-width: 1800px;
+/* Main Layout */
+.main-layout {
+  margin-top: 56px;
+  max-width: 680px;
   margin-left: auto;
   margin-right: auto;
+  padding: 16px;
 }
+@media(max-width:767px) { .main-layout { padding: 12px 8px; margin-top: 54px; } }
 
-.masonry-grid {
-  column-count: 7;
-  column-gap: 1rem;
-}
-
-/* Pin Card */
-.pin-card {
-  break-inside: avoid;
-  margin-bottom: 1rem;
+/* Create Post Box */
+.create-post-container {
+  background: var(--bg-white);
   border-radius: var(--radius-lg);
-  overflow: hidden;
-  background: white;
+  box-shadow: var(--shadow-xs);
+  padding: 12px 16px;
+  margin-bottom: 16px;
+}
+
+.create-post-top { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+
+.create-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.create-input-trigger {
+  flex: 1;
+  height: 42px;
+  padding: 0 16px;
+  border-radius: var(--radius-xxl);
+  background: var(--bg-primary);
+  border: none;
+  font-size: 15px;
+  color: var(--text-secondary);
   cursor: pointer;
-  position: relative;
-  transition: var(--transition-normal);
+  text-align: left;
+  transition: all 0.15s ease;
 }
-.pin-card:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-lg);
-}
+.create-input-trigger:hover { background: #E4E6EB; }
 
-.pin-media-wrapper {
-  position: relative;
+.create-divider { height: 1px; background: var(--border-light); margin: 12px 0; }
+.create-actions-row { display: flex; justify-content: space-around; }
+
+.create-action-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all 0.15s ease;
+  flex: 1;
+  justify-content: center;
+}
+.create-action-item:hover { background: var(--bg-primary); color: var(--text-primary); }
+.create-action-item i { font-size: 22px; }
+.create-action-item.video-icon i { color: #F02849; }
+.create-action-item.photo-icon i { color: #45BD62; }
+.create-action-item.feeling-icon i { color: #F7B928; }
+
+/* Feed Card */
+.feed-card {
+  background: var(--bg-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+  margin-bottom: 16px;
   overflow: hidden;
-  background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+  transition: box-shadow 0.2s ease;
+}
+.feed-card:hover { box-shadow: var(--shadow-sm); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
 }
 
-.pin-image {
+.card-user-info { display: flex; align-items: center; gap: 10px; }
+
+.card-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-user-meta h3 { 
+  font-size: 15px; 
+  font-weight: 600; 
+  line-height: 1.3; 
+  color: var(--text-primary); 
+}
+
+.card-time {
+  font-size: 13px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.card-time i { font-size: 11px; }
+
+.card-more-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  border: none;
+  background: #E4E6EB;
+  color: var(--text-secondary);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+.card-more-btn:hover { background: #D8DADF; }
+
+.card-body { padding: 0 16px 12px; }
+
+.post-title-text {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.card-text {
+  font-size: 15px;
+  line-height: 1.5;
+  margin-bottom: 12px;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+.media-box {
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: #000;
+  margin-bottom: 12px;
+}
+
+.media-image {
   width: 100%;
   display: block;
   object-fit: cover;
-  transition: transform 0.4s ease;
-}
-.pin-card:hover .pin-image { transform: scale(1.03); }
-
-/* Broken State */
-.pin-card.broken-state .pin-media-wrapper {
-  background: linear-gradient(135deg, #FFF5F5 0%, #FFE8E8 100%);
-  min-height: 250px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  max-height: 500px;
 }
 
-.broken-placeholder {
-  text-align: center;
-  padding: 2.5rem 1.5rem;
-  color: var(--error);
-}
-.broken-placeholder i { 
-  font-size: 3.5rem; 
-  margin-bottom: 1rem; 
-  opacity: 0.4;
-  display: block;
-}
-.broken-placeholder p { 
-  font-size: 1rem; 
-  font-weight: 600; 
-  margin-bottom: 0.5rem;
-}
-.broken-placeholder small { 
-  font-size: 0.875rem; 
-  color: var(--text-gray); 
-  font-weight: 400;
-}
-
-.remove-broken-action {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: rgba(220, 38, 38, 0.92);
-  border: none;
-  color: white;
-  font-size: 0.9375rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-  transition: var(--transition-fast);
-  backdrop-filter: blur(8px);
-}
-.remove-broken-action:hover { 
-  transform: scale(1.1) rotate(90deg);
-  background: var(--error);
-}
-
-/* Video Card */
-.video-container {
+/* Video Player Simplified */
+.video-player-simple {
   position: relative;
   width: 100%;
   background: #000;
-}
-.video-container video {
-  width: 100%;
-  display: block;
-  object-fit: cover;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
 }
 
-.video-overlay-controls {
+.video-element-main {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  outline: none;
+}
+
+.play-button-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  width: 60px;
+  height: 60px;
+  background: rgba(255,255,255,0.95);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--fb-blue);
+  font-size: 22px;
+  cursor: pointer;
+  z-index: 10;
+  opacity: 1;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+}
+.play-button-center:hover { transform: translate(-50%, -50%) scale(1.1); }
+.play-button-center.hidden-state { opacity: 0; transform: translate(-50%, -50%) scale(0.75); pointer-events: none; }
+
+.controls-overlay {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, transparent 100%);
-  padding: 2rem 1rem 1rem;
+  background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 60%, transparent 100%);
+  padding: 28px 14px 10px;
   opacity: 0;
-  transition: opacity 0.25s ease;
+  transition: opacity 0.3s ease;
+  z-index: 5;
 }
-.pin-card:hover .video-overlay-controls { opacity: 1; }
+.video-player-simple.show-controls .controls-overlay,
+.video-player-simple:hover .controls-overlay { opacity: 1; }
 
-.progress-bar-container {
+.progress-bar-track {
   width: 100%;
-  height: 4px;
+  height: 5px;
   background: rgba(255,255,255,0.25);
-  border-radius: 2px;
+  border-radius: 3px;
   cursor: pointer;
-  margin-bottom: 0.75rem;
+  margin-bottom: 10px;
+  position: relative;
+  transition: height 0.15s ease;
 }
+.progress-bar-track:hover { height: 8px; }
+
 .progress-bar-fill {
   height: 100%;
-  background: var(--primary);
-  border-radius: 2px;
+  background: var(--fb-blue);
+  border-radius: 3px;
   width: 0%;
-  transition: width 0.1s linear;
+  position: relative;
+  transition: width 0.08s linear;
+}
+.progress-bar-fill::after {
+  content: '';
+  position: absolute;
+  right: -7px;
+  top: 50%;
+  transform: translateY(-50%) scale(0);
+  width: 14px;
+  height: 14px;
+  background: var(--fb-blue);
+  border-radius: var(--radius-full);
+  transition: transform 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+.progress-bar-track:hover .progress-bar-fill::after { transform: translateY(-50%) scale(1); }
+
+.buffered-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: rgba(255,255,255,0.35);
+  border-radius: 3px;
+  width: 0%;
 }
 
-.video-control-buttons {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.control-group-left,
-.control-group-right {
-  display: flex;
-  gap: 0.75rem;
-  align-items: center;
-}
+.controls-row-flex { display: flex; justify-content: space-between; align-items: center; }
+.controls-group-left, .controls-group-right { display: flex; align-items: center; gap: 8px; }
 
-.video-control-btn {
+.ctrl-btn {
   background: none;
   border: none;
   color: white;
-  font-size: 1rem;
+  font-size: 16px;
   cursor: pointer;
-  padding: 0.25rem;
+  padding: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0.9;
-  transition: var(--transition-fast);
+  opacity: 0.92;
+  transition: all 0.15s ease;
+  border-radius: var(--radius-xs);
 }
-.video-control-btn:hover { opacity: 1; transform: scale(1.1); }
+.ctrl-btn:hover { opacity: 1; background: rgba(255,255,255,0.15); transform: scale(1.08); }
 
-.time-display {
-  color: white;
-  font-size: 0.8125rem;
-  font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
-}
+.volume-control-group { display: flex; align-items: center; gap: 6px; }
 
-.volume-slider {
+.volume-slider-input {
   width: 70px;
   height: 4px;
   -webkit-appearance: none;
@@ -417,534 +505,413 @@ body {
   background: rgba(255,255,255,0.35);
   border-radius: 2px;
   outline: none;
+  transition: width 0.2s ease;
 }
-.volume-slider::-webkit-slider-thumb {
+.volume-control-group:hover .volume-slider-input { width: 85px; }
+.volume-slider-input::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 14px;
-  height: 14px;
+  width: 13px;
+  height: 13px;
   background: white;
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
-.play-button-overlay {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 60px;
-  height: 60px;
-  background: rgba(230, 0, 35, 0.94);
-  border-radius: 50%;
+.time-text-display {
+  color: white;
+  font-size: 13px;
+  font-family: 'SF Mono', Monaco, Consolas, monospace;
+  min-width: 90px;
+  text-align: center;
+}
+
+/* Card Footer */
+.card-footer { padding: 8px 16px 12px; border-top: 1px solid var(--border-light); }
+
+.reaction-stats-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.reaction-emojis { display: flex; align-items: center; }
+
+.reaction-emoji-badge {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  font-size: 1.5rem;
-  cursor: pointer;
-  z-index: 10;
-  transition: var(--transition-normal);
-  box-shadow: 0 4px 20px rgba(230, 0, 35, 0.4);
+  font-size: 11px;
+  margin-right: -6px;
+  border: 2px solid var(--bg-white);
 }
-.play-button-overlay:hover {
-  transform: translate(-50%, -50%) scale(1.1);
-  box-shadow: 0 6px 28px rgba(230, 0, 35, 0.55);
+.reaction-emoji-badge.like-badge { background: var(--fb-blue); color: white; }
+.reaction-emoji-badge.love-badge { background: #F33E58; color: white; }
+.reaction-emoji-badge.wow-badge { background: #F7B928; color: white; }
+
+.action-buttons-row {
+  display: flex;
+  border-top: 1px solid var(--border-light);
+  padding-top: 0;
 }
 
-.pin-info-section {
-  padding: 0.75rem 0.625rem;
-}
-.pin-title-text {
-  font-size: 0.9375rem;
+.action-btn-card {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 8px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 14px;
   font-weight: 600;
-  line-height: 1.4;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  color: var(--text-dark);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all 0.15s ease;
+}
+.action-btn-card:hover { background: var(--bg-primary); color: var(--text-primary); }
+.action-btn-card.is-liked { color: var(--fb-blue); }
+.action-btn-card i { font-size: 18px; }
+
+/* Coming Soon Badge */
+.coming-soon-badge {
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  font-weight: 400;
+  margin-left: 4px;
+}
+
+/* Edit Post Button */
+.edit-post-btn {
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+  margin: 8px 16px;
+}
+.edit-post-btn:hover { 
+  background: var(--bg-primary); 
+  color: var(--fb-blue); 
+  border-color: var(--fb-blue);
 }
 
 /* Loading States */
-.loading-indicator {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 3rem 0;
-}
-.spinner-element {
-  width: 42px;
-  height: 42px;
-  border: 3.5px solid #E0E0E0;
-  border-top-color: var(--primary);
-  border-radius: 50%;
-  animation: spin-animation 0.75s linear infinite;
-}
-@keyframes spin-animation {
-  to { transform: rotate(360deg); }
-}
+.loading-spinner-box { display: flex; justify-content: center; align-items: center; padding: 32px 0; }
 
-.skeleton-loader {
-  animation: skeleton-pulse 1.8s ease-in-out infinite;
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  border-radius: var(--radius-lg);
+.spinner-circle {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #E4E6EB;
+  border-top-color: var(--fb-blue);
+  border-radius: var(--radius-full);
+  animation: spin-animation 0.8s linear infinite;
 }
-@keyframes skeleton-pulse {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-.skeleton-card {
-  break-inside: avoid;
-  margin-bottom: 1rem;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-}
+@keyframes spin-animation { to { transform: rotate(360deg); } }
 
-/* End of Content Message */
-.end-message {
+.end-of-feed-msg { text-align: center; padding: 32px 16px; color: var(--text-secondary); font-size: 15px; }
+.end-of-feed-msg i { font-size: 28px; margin-bottom: 8px; display: block; opacity: 0.35; }
+
+.empty-state-box {
+  background: var(--bg-white);
+  border-radius: var(--radius-lg);
+  padding: 48px 24px;
   text-align: center;
-  padding: 3rem 1rem;
-  color: var(--text-light);
-  font-size: 0.9375rem;
+  color: var(--text-secondary);
 }
-.end-message i {
-  font-size: 2rem;
-  margin-bottom: 0.75rem;
-  display: block;
-  opacity: 0.4;
-}
+.empty-state-box i { font-size: 48px; margin-bottom: 16px; opacity: 0.25; display: block; }
+.empty-state-box h3 { font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
+.empty-state-box p { font-size: 15px; }
 
 /* Upload Modal */
-.modal-backdrop {
+.modal-backdrop-layer {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.65);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   z-index: 2000;
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
   visibility: hidden;
-  transition: var(--transition-normal);
-  padding: 1.5rem;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 16px;
 }
-.modal-backdrop.visible {
-  opacity: 1;
-  visibility: visible;
-}
+.modal-backdrop-layer.is-visible { opacity: 1; visibility: visible; }
 
-.modal-dialog {
-  background: white;
+.modal-window {
+  background: var(--bg-white);
   border-radius: var(--radius-xl);
-  padding: 2.25rem;
-  max-width: 580px;
+  padding: 20px;
   width: 100%;
+  max-width: 500px;
   max-height: 90vh;
   overflow-y: auto;
-  transform: scale(0.92) translateY(24px);
-  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 24px 64px rgba(0,0,0,0.25);
+  transform: scale(0.94) translateY(24px);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 24px 64px rgba(0,0,0,0.2);
 }
-.modal-backdrop.visible .modal-dialog {
-  transform: scale(1) translateY(0);
-}
+.modal-backdrop-layer.is-visible .modal-window { transform: scale(1) translateY(0); }
 
-.modal-header {
+.modal-header-section {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.75rem;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-light);
 }
-.modal-heading {
-  font-size: 1.875rem;
-  font-weight: 700;
-  color: var(--text-dark);
-}
+.modal-title-heading { font-size: 20px; font-weight: 700; color: var(--text-primary); }
 
-.close-modal-btn {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+.close-modal-x {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
   border: none;
-  background: var(--bg-main);
+  background: var(--bg-primary);
   cursor: pointer;
-  font-size: 1.25rem;
-  color: var(--text-dark);
+  font-size: 18px;
+  color: var(--text-secondary);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: var(--transition-fast);
+  transition: all 0.15s ease;
 }
-.close-modal-btn:hover { 
-  background: #E0E0E0; 
-  transform: rotate(90deg);
-}
-.close-modal-btn:disabled { 
-  opacity: 0.45; 
-  cursor: not-allowed; 
-  transform: none;
-}
+.close-modal-x:hover { background: #D8DADF; transform: rotate(90deg); }
+.close-modal-x:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
-.form-field { margin-bottom: 1.5rem; }
-.form-label {
-  display: block;
-  font-weight: 600;
-  margin-bottom: 0.625rem;
-  font-size: 0.9375rem;
-  color: var(--text-dark);
-}
-.text-input {
+.form-field-group { margin-bottom: 16px; }
+.form-label-text { display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px; color: var(--text-primary); }
+
+.text-input-field {
   width: 100%;
-  padding: 0.875rem 1.125rem;
-  border: 2px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  font-size: 1rem;
-  outline: none;
-  transition: var(--transition-fast);
-  background: white;
-}
-.text-input:focus { 
-  border-color: var(--primary); 
-  box-shadow: 0 0 0 3px rgba(230, 0, 35, 0.08);
-}
-.text-input:disabled { 
-  background: #F5F5F5; 
-  cursor: not-allowed; 
-  opacity: 0.55;
-}
-
-.upload-dropzone {
-  border: 2.5px dashed var(--border-color);
+  padding: 12px 14px;
+  border: 2px solid var(--border-input);
   border-radius: var(--radius-md);
-  padding: 3rem 1.5rem;
+  font-size: 15px;
+  color: var(--text-primary);
+  outline: none;
+  transition: all 0.15s ease;
+  background: var(--bg-white);
+  resize: vertical;
+  min-height: 60px;
+  font-family: inherit;
+  line-height: 1.5;
+}
+.text-input-field:focus { border-color: var(--fb-blue); box-shadow: 0 0 0 3px rgba(24,119,242,0.1); }
+.text-input-field:disabled { background: var(--bg-primary); cursor: not-allowed; opacity: 0.55; }
+.text-input-field::placeholder { color: var(--text-muted); }
+
+.dropzone-area {
+  border: 2.5px dashed var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 32px 20px;
   text-align: center;
   cursor: pointer;
-  background: #FAFAFA;
-  transition: var(--transition-normal);
+  background: #FAFBFC;
+  transition: all 0.25s ease;
   position: relative;
 }
-.upload-dropzone:not(.has-file-selected):not(.is-uploading):hover {
-  border-color: var(--primary);
-  background: #FFF5F5;
-  transform: translateY(-3px);
+.dropzone-area:not(.has-file-selected):not(.is-uploading-state):hover {
+  border-color: var(--fb-blue);
+  background: var(--fb-blue-light);
+  transform: translateY(-2px);
   box-shadow: var(--shadow-sm);
 }
-.upload-dropzone.has-file-selected {
-  border-style: solid;
-  border-color: var(--success);
-  background: #F1FDF4;
-  padding: 1.25rem;
-}
-.upload-dropzone.is-uploading {
-  border-style: solid;
-  border-color: var(--primary);
-  background: #FFF5F5;
-  pointer-events: none;
-  opacity: 0.7;
-}
+.dropzone-area.has-file-selected { border-style: solid; border-color: var(--success); background: var(--success-bg); padding: 12px; }
+.dropzone-area.is-uploading-state { border-style: solid; border-color: var(--fb-blue); background: var(--fb-blue-light); pointer-events: none; opacity: 0.78; }
 
-.upload-icon-large {
-  font-size: 3.25rem;
-  color: var(--text-gray);
-  margin-bottom: 1rem;
-  display: block;
-}
-.upload-main-text {
-  color: var(--text-gray);
-  font-size: 0.9375rem;
-  font-weight: 500;
-}
-.upload-sub-text {
-  font-size: 0.8125rem;
-  color: var(--text-light);
-  margin-top: 0.375rem;
-}
+.upload-cloud-icon { font-size: 40px; color: var(--text-secondary); margin-bottom: 12px; display: block; }
+.upload-text-main-line { color: var(--text-secondary); font-size: 15px; font-weight: 600; }
+.upload-text-sub-line { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
 .hidden-file-input { display: none; }
 
-.file-preview-area {
-  display: none;
-  margin-top: 1.25rem;
-}
-.file-preview-area.visible { display: block; }
+.preview-section-area { display: none; margin-top: 12px; }
+.preview-section-area.is-displayed { display: block; }
 
 .preview-media-container {
   position: relative;
   border-radius: var(--radius-md);
   overflow: hidden;
   background: #000;
-  max-height: 320px;
+  max-height: 280px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1rem;
+  margin-bottom: 12px;
 }
-.preview-image-element {
-  max-width: 100%;
-  max-height: 320px;
-  object-fit: contain;
-}
-.preview-video-element {
-  max-width: 100%;
-  max-height: 320px;
-  display: block;
-}
+.preview-image-tag { max-width: 100%; max-height: 280px; object-fit: contain; }
+.preview-video-tag { max-width: 100%; max-height: 280px; display: block; }
 
-.delete-file-btn {
+.delete-file-button {
   position: absolute;
-  top: 0.625rem;
-  right: 0.625rem;
+  top: 8px;
+  right: 8px;
   width: 32px;
   height: 32px;
-  border-radius: 50%;
-  background: var(--primary);
+  border-radius: var(--radius-full);
+  background: var(--error);
   border: none;
   color: white;
-  font-size: 0.875rem;
+  font-size: 14px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 10;
-  transition: var(--transition-fast);
+  transition: all 0.15s ease;
 }
-.delete-file-btn:hover { transform: scale(1.1); }
+.delete-file-button:hover { transform: scale(1.1); }
 
-.file-metadata-display {
-  background: var(--bg-main);
-  border-radius: var(--radius-sm);
-  padding: 0.875rem 1rem;
+.file-info-strip {
+  background: var(--bg-primary);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 10px;
 }
-.file-type-indicator {
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-sm);
-  background: var(--primary);
+.file-type-icon-badge {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-md);
+  background: var(--fb-blue);
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.125rem;
+  font-size: 16px;
   flex-shrink: 0;
 }
-.file-details-text { flex: 1; min-width: 0; }
-.file-name-display {
-  font-size: 0.875rem;
-  font-weight: 600;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.file-size-display {
-  font-size: 0.8125rem;
-  color: var(--text-gray);
-}
-.change-file-btn {
-  padding: 0.5rem 1rem;
-  border-radius: var(--radius-sm);
-  border: 2px solid var(--border-color);
-  background: white;
-  font-size: 0.8125rem;
+.file-details-column { flex: 1; min-width: 0; }
+.file-name-text { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.file-size-text { font-size: 13px; color: var(--text-secondary); }
+.change-file-button {
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--border-light);
+  background: var(--bg-white);
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   flex-shrink: 0;
-  transition: var(--transition-fast);
+  transition: all 0.15s ease;
 }
-.change-file-btn:hover { 
-  border-color: var(--primary); 
-  color: var(--primary);
-}
+.change-file-button:hover { border-color: var(--fb-blue); color: var(--fb-blue); }
 
 /* Progress Section */
-.upload-progress-section {
+.progress-section-area {
   display: none;
-  margin-top: 1.5rem;
-  padding: 1.25rem;
-  background: linear-gradient(135deg, #FFF5F5 0%, #FFE8E8 100%);
+  margin-top: 16px;
+  padding: 14px;
+  background: linear-gradient(135deg, #E8F4FD 0%, #D1E9FC 100%);
   border-radius: var(--radius-md);
-  border: 2px solid var(--primary);
+  border: 2px solid var(--fb-blue);
 }
-.upload-progress-section.visible { 
-  display: block; 
-  animation: slideUpFade 0.3s ease; 
-}
-@keyframes slideUpFade {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+.progress-section-area.is-displayed { display: block; animation: slideUpAnimation 0.3s ease; }
+@keyframes slideUpAnimation { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
-.progress-header-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.875rem;
-}
-.status-indicator-group {
-  display: flex;
-  align-items: center;
-  gap: 0.625rem;
-}
-.status-spinner-small {
-  width: 20px;
-  height: 20px;
-  border: 3px solid #FFCCCC;
-  border-top-color: var(--primary);
-  border-radius: 50%;
+.progress-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.progress-status-info { display: flex; align-items: center; gap: 8px; }
+.spinner-mini-icon {
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid #B8DDF5;
+  border-top-color: var(--fb-blue);
+  border-radius: var(--radius-full);
   animation: spin-animation 0.8s linear infinite;
 }
-.status-spinner-small.completed {
-  animation: none;
-  background: var(--success);
-  color: white;
-  font-size: 0.75rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.status-label-text {
-  font-size: 0.9375rem;
-  font-weight: 600;
-}
-.percentage-value {
-  font-size: 1.0625rem;
-  font-weight: 700;
-  color: var(--primary);
-  min-width: 48px;
-  text-align: right;
-}
-.progress-bar-outer {
-  width: 100%;
-  height: 10px;
-  background: #FFD6D6;
-  border-radius: 5px;
-  overflow: hidden;
-  margin-bottom: 0.875rem;
-}
-.progress-bar-inner {
+.spinner-mini-icon.completed-state { animation: none; background: var(--success); color: white; font-size: 11px; display: flex; align-items: center; justify-content: center; }
+.status-text-label { font-size: 14px; font-weight: 600; }
+.percentage-text-value { font-size: 16px; font-weight: 700; color: var(--fb-blue); min-width: 46px; text-align: right; }
+
+.outer-progress-bar { width: 100%; height: 8px; background: #B8DDF5; border-radius: 4px; overflow: hidden; margin-bottom: 10px; }
+.inner-progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--primary) 0%, #FF4D6D 100%);
-  border-radius: 5px;
+  background: linear-gradient(90deg, var(--fb-blue) 0%, #42A5F5 100%);
+  border-radius: 4px;
   width: 0%;
   transition: width 0.25s ease;
   position: relative;
 }
-.progress-bar-inner::after {
+.inner-progress-fill::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.35) 50%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%);
   animation: shimmer-effect 1.5s infinite;
 }
-@keyframes shimmer-effect {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
-.progress-details-row {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.8125rem;
-  color: var(--text-gray);
-}
+@keyframes shimmer-effect { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
 
-.upload-progress-section.success-state {
-  background: linear-gradient(135deg, #F1F8F4 0%, #D4EDDA 100%);
-  border-color: var(--success);
-}
-.upload-progress-section.success-state .percentage-value,
-.upload-progress-section.success-state .status-label-text {
-  color: var(--success);
-}
-.upload-progress-section.success-state .progress-bar-outer {
-  background: #B8E6C8;
-}
-.upload-progress-section.success-state .progress-bar-inner {
-  background: linear-gradient(90deg, var(--success) 0%, #28A745 100%);
-}
-.upload-progress-section.success-state .progress-bar-inner::after {
-  animation: none;
-}
+.progress-details-row { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-secondary); }
 
-.upload-progress-section.error-state {
-  background: linear-gradient(135deg, #FFF5F5 0%, #FFE8E8 100%);
-  border-color: var(--error);
-}
-.upload-progress-section.error-state .status-label-text,
-.upload-progress-section.error-state .percentage-value {
-  color: var(--error);
-}
-.upload-progress-section.error-state .progress-bar-outer {
-  background: #FFCDD2;
-}
-.upload-progress-section.error-state .progress-bar-inner {
-  background: var(--error);
-}
+.progress-section-area.success-mode { background: linear-gradient(135deg, var(--success-bg) 0%, #D4EDDA 100%); border-color: var(--success); }
+.progress-section-area.success-mode .percentage-text-value,
+.progress-section-area.success-mode .status-text-label { color: var(--success); }
+.progress-section-area.success-mode .outer-progress-bar { background: #C3E6CB; }
+.progress-section-area.success-mode .inner-progress-fill { background: linear-gradient(90deg, var(--success) 0%, #34CE57 100%); }
+.progress-section-area.success-mode .inner-progress-fill::after { animation: none; }
 
-.modal-footer-actions {
-  display: flex;
-  gap: 0.875rem;
-  margin-top: 1.875rem;
-}
-.action-button {
+.progress-section-area.error-mode { background: linear-gradient(135deg, var(--error-bg) 0%, #FECACA 100%); border-color: var(--error); }
+.progress-section-area.error-mode .status-text-label,
+.progress-section-area.error-mode .percentage-text-value { color: var(--error); }
+.progress-section-area.error-mode .outer-progress-bar { background: #FECACA; }
+.progress-section-area.error-mode .inner-progress-fill { background: var(--error); }
+
+.modal-footer-buttons { display: flex; gap: 10px; margin-top: 20px; }
+
+.btn-modal {
   flex: 1;
-  padding: 0.9375rem 1.5rem;
-  border-radius: 24px;
-  font-size: 1rem;
+  padding: 12px 20px;
+  border-radius: var(--radius-xxl);
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   border: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  transition: var(--transition-normal);
+  gap: 8px;
+  transition: all 0.25s ease;
+  font-family: inherit;
 }
-.button-secondary {
-  background: var(--bg-main);
-  color: var(--text-dark);
-}
-.button-secondary:hover { 
-  background: #E0E0E0; 
-  transform: translateY(-1px);
-}
-.button-primary {
-  background: var(--primary);
-  color: white;
-  box-shadow: 0 4px 12px rgba(230, 0, 35, 0.25);
-}
-.button-primary:hover:not(:disabled) { 
-  background: var(--primary-hover); 
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(230, 0, 35, 0.35);
-}
-.button-primary:disabled { 
-  background: #CCCCCC; 
-  cursor: not-allowed; 
-  box-shadow: none;
-}
-.button-loading {
-  position: relative;
-  color: transparent !important;
-  pointer-events: none;
-}
-.button-loading::after {
+.btn-modal-secondary { background: #E4E6EB; color: var(--text-primary); }
+.btn-modal-secondary:hover { background: #D8DADF; transform: translateY(-1px); }
+.btn-modal-primary { background: var(--fb-blue); color: white; box-shadow: 0 2px 8px rgba(24,119,242,0.3); }
+.btn-modal-primary:hover:not(:disabled) { background: var(--fb-blue-hover); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(24,119,242,0.4); }
+.btn-modal-primary:disabled { background: #BCC0C4; cursor: not-allowed; box-shadow: none; }
+.btn-modal-loading { position: relative; color: transparent !important; pointer-events: none; }
+.btn-modal-loading::after {
   content: '';
   position: absolute;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border: 2.5px solid rgba(255,255,255,0.3);
   border-top-color: white;
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   animation: spin-animation 0.8s linear infinite;
 }
 
 /* Preview Modal */
-.preview-modal-overlay {
+.fullscreen-preview-modal {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.97);
@@ -954,13 +921,10 @@ body {
   justify-content: center;
   opacity: 0;
   visibility: hidden;
-  transition: var(--transition-normal);
-  padding: 2rem;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 16px;
 }
-.preview-modal-overlay.visible {
-  opacity: 1;
-  visibility: visible;
-}
+.fullscreen-preview-modal.is-visible { opacity: 1; visibility: visible; }
 
 .preview-content-wrapper {
   position: relative;
@@ -970,11 +934,9 @@ body {
   flex-direction: column;
   align-items: center;
   transform: scale(0.93);
-  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-.preview-modal-overlay.visible .preview-content-wrapper {
-  transform: scale(1);
-}
+.fullscreen-preview-modal.is-visible .preview-content-wrapper { transform: scale(1); }
 
 .preview-media-display {
   position: relative;
@@ -987,140 +949,166 @@ body {
   align-items: center;
   justify-content: center;
 }
-.fullsize-preview-image {
-  max-width: 90vw;
-  max-height: 82vh;
-  object-fit: contain;
-}
-.fullsize-video-wrapper {
-  position: relative;
-  max-width: 90vw;
-  max-height: 82vh;
-}
-.fullsize-video-wrapper video {
-  max-width: 90vw;
-  max-height: 82vh;
-  display: block;
-}
+.fullsize-image-preview { max-width: 90vw; max-height: 82vh; object-fit: contain; }
+.fullscreen-video-container { position: relative; max-width: 90vw; max-height: 82vh; }
+.fullscreen-video-container video { max-width: 90vw; max-height: 82vh; display: block; }
 
 .fullscreen-video-controls {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.94) 0%, transparent 100%);
-  padding: 1.5rem 1.25rem 1.125rem;
+  background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 100%);
+  padding: 24px 16px 14px;
 }
 
 .close-preview-button {
   position: absolute;
-  top: -48px;
+  top: -44px;
   right: 0;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
   background: rgba(255,255,255,0.12);
   border: none;
   color: white;
-  font-size: 1.25rem;
+  font-size: 18px;
   cursor: pointer;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: var(--transition-fast);
+  transition: all 0.15s ease;
 }
-.close-preview-button:hover { 
-  background: rgba(255,255,255,0.22); 
-  transform: rotate(90deg);
-}
+.close-preview-button:hover { background: rgba(255,255,255,0.22); transform: rotate(90deg); }
 
-.preview-action-buttons {
-  display: flex;
-  gap: 0.875rem;
-  margin-top: 1.375rem;
-}
+.preview-action-buttons { display: flex; gap: 10px; margin-top: 16px; }
 .preview-action-btn {
-  padding: 0.8125rem 1.875rem;
-  border-radius: 24px;
+  padding: 10px 20px;
+  border-radius: var(--radius-xxl);
   border: none;
-  font-size: 0.9375rem;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  transition: var(--transition-normal);
+  gap: 8px;
+  transition: all 0.25s ease;
+  font-family: inherit;
 }
-.download-action-btn {
-  background: var(--primary);
+.download-preview-btn { background: var(--fb-blue); color: white; }
+.download-preview-btn:hover { background: var(--fb-blue-hover); transform: translateY(-2px); box-shadow: 0 6px 22px rgba(24,119,242,0.45); }
+.save-preview-btn { background: white; color: var(--text-primary); }
+.save-preview-btn:hover { background: #F0F2F5; transform: translateY(-2px); box-shadow: 0 4px 18px rgba(0,0,0,0.15); }
+
+/* Coming Soon Modal */
+.coming-soon-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  z-index: 4000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 16px;
+}
+.coming-soon-modal.is-visible { opacity: 1; visibility: visible; }
+
+.coming-soon-dialog {
+  background: var(--bg-white);
+  border-radius: var(--radius-xl);
+  padding: 32px 24px;
+  max-width: 360px;
+  width: 100%;
+  text-align: center;
+  transform: scale(0.9) translateY(20px);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: var(--shadow-lg);
+}
+.coming-soon-modal.is-visible .coming-soon-dialog { transform: scale(1) translateY(0); }
+
+.coming-soon-icon { font-size: 56px; color: var(--fb-blue); margin-bottom: 16px; display: block; }
+.coming-soon-title { font-size: 22px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
+.coming-soon-description { font-size: 15px; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.5; }
+.coming-soon-close-btn {
+  padding: 12px 32px;
+  border-radius: var(--radius-xxl);
+  border: none;
+  background: var(--fb-blue);
   color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-family: inherit;
 }
-.download-action-btn:hover { 
-  background: var(--primary-hover); 
-  transform: translateY(-2px);
-  box-shadow: 0 6px 22px rgba(230, 0, 35, 0.45);
-}
-.save-action-btn {
-  background: white;
-  color: var(--text-dark);
-}
-.save-action-btn:hover { 
-  background: #F0F0F0; 
-  transform: translateY(-2px);
-  box-shadow: 0 4px 18px rgba(0,0,0,0.15);
-}
+.coming-soon-close-btn:hover { background: var(--fb-blue-hover); transform: translateY(-1px); }
 
 /* Toast Notification */
 .toast-notification {
   position: fixed;
-  bottom: 2rem;
+  bottom: 24px;
   left: 50%;
   transform: translateX(-50%) translateY(140px);
-  background: var(--text-dark);
+  background: #323232;
   color: white;
-  padding: 1rem 1.875rem;
-  border-radius: 28px;
+  padding: 12px 24px;
+  border-radius: var(--radius-xxl);
   font-weight: 500;
-  font-size: 0.9375rem;
+  font-size: 14px;
   box-shadow: var(--shadow-lg);
   z-index: 5000;
   opacity: 0;
-  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  max-width: 90vw;
+  text-align: center;
 }
-.toast-notification.visible {
-  transform: translateX(-50%) translateY(0);
-  opacity: 1;
-}
-.toast-notification.error-type { background: var(--error); }
+.toast-notification.is-visible { transform: translateX(-50%) translateY(0); opacity: 1; }
+.toast-notification.toast-error { background: var(--error); }
+.toast-notification.toast-success { background: var(--success); }
 
-/* Responsive Design */
-@media (max-width: 1700px) {
-  .masonry-grid { column-count: 6; }
-}
-@media (max-width: 1400px) {
-  .masonry-grid { column-count: 5; }
-}
-@media (max-width: 1100px) {
-  .masonry-grid { column-count: 4; }
-}
-@media (max-width: 800px) {
-  .masonry-grid { column-count: 3; }
-  .header { padding: 0.625rem 1.25rem; gap: 1rem; }
-  .search-container { max-width: 420px; }
-  .icon-btn, .user-avatar { width: 40px; height: 40px; font-size: 1rem; }
-  .main-content { padding: 1.25rem 1.25rem; margin-top: 72px; }
-}
-@media (max-width: 550px) {
-  .masonry-grid { column-count: 2; }
-  .main-content { padding: 1rem; margin-top: 68px; }
-  .header { padding: 0.5rem 0.875rem; }
-  .logo { font-size: 1.5rem; }
-  .search-input { font-size: 0.875rem; padding: 0.75rem 2.75rem 0.75rem 1rem; }
-  .modal-dialog { padding: 1.5rem; border-radius: var(--radius-lg); }
+/* Responsive */
+@media(max-width:991px) { .search-wrapper { width: 200px; } }
+@media(max-width:767px) {
+  .header { padding: 0 8px; height: 54px; }
+  .search-wrapper { display: none; }
+  .logo-fb { font-size: 26px; }
+  .nav-btn, .user-avatar-nav { width: 36px; height: 36px; font-size: 16px; }
+  .main-layout { margin-top: 54px; padding: 10px 6px; }
+  .create-post-container { padding: 10px 12px; margin-bottom: 12px; }
+  .create-avatar { width: 36px; height: 36px; font-size: 14px; }
+  .create-input-trigger { height: 38px; font-size: 14px; }
+  .create-action-item { padding: 8px 10px; font-size: 13px; }
+  .create-action-item i { font-size: 18px; }
+  .feed-card { margin-bottom: 12px; }
+  .card-header { padding: 10px 12px; }
+  .card-avatar { width: 36px; height: 36px; font-size: 13px; }
+  .card-body { padding: 0 12px 10px; }
+  .card-text { font-size: 14px; }
+  .post-title-text { font-size: 16px; }
+  .card-footer { padding: 6px 12px 10px; }
+  .action-btn-card { padding: 8px 6px; font-size: 13px; }
+  .action-btn-card i { font-size: 16px; }
+  .modal-window { padding: 16px; border-radius: var(--radius-lg); }
   .preview-action-buttons { flex-direction: column; width: 100%; }
   .preview-action-btn { justify-content: center; }
+  .play-button-center { width: 52px; height: 52px; font-size: 20px; }
+  .controls-overlay { padding: 24px 12px 10px; }
+  .ctrl-btn { padding: 5px; font-size: 14px; }
+  .time-text-display { font-size: 12px; min-width: 80px; }
+  .edit-post-btn { margin: 6px 12px; font-size: 12px; }
+}
+@media(max-width:374px) {
+  .main-layout { padding: 8px 4px; }
+  .create-actions-row { flex-direction: column; gap: 4px; }
+  .create-action-item { justify-content: flex-start; padding: 8px 12px; }
+  .action-buttons-row { flex-direction: column; gap: 4px; }
+  .action-btn-card { border-radius: var(--radius-sm); }
 }
 </style>
 </head>
@@ -1128,1154 +1116,1386 @@ body {
 
 <!-- HEADER -->
 <header class="header" role="banner">
-  <i class="fab fa-pinterest logo" aria-label="Pinterest Home"></i>
-  
-  <div class="search-container">
-    <input type="text" class="search-input" placeholder="Search for inspiration" aria-label="Search"/>
-    <button class="search-btn" aria-label="Search"><i class="fas fa-search"></i></button>
+  <div class="header-left">
+    <i class="fab fa-facebook logo-fb" aria-label="Facebook Home"></i>
+    <div class="search-wrapper">
+      <i class="fas fa-search search-icon-left"></i>
+      <input type="text" class="search-input-field btn-coming-soon" data-feature="Search" placeholder="Search Facebook" aria-label="Search"/>
+    </div>
   </div>
   
-  <nav class="header-actions" role="navigation">
-    <button class="icon-btn" id="createPinBtn" aria-label="Create Pin">
-      <i class="fas fa-plus"></i>
-      <span class="notification-badge"></span>
-    </button>
-    <button class="icon-btn" aria-label="Notifications">
-      <i class="far fa-bell"></i>
-      <span class="notification-badge"></span>
-    </button>
-    <button class="icon-btn" aria-label="Messages">
-      <i class="fas fa-comment-dots"></i>
-    </button>
+  <nav class="header-right" role="navigation">
+    <!-- WORKING: Create Post -->
+    <button class="nav-btn" id="btnCreatePost" title="Create Post"><i class="fas fa-plus"></i></button>
     
-    <div style="position:relative" id="userMenuContainer">
-      <button class="user-avatar" id="avatarButton" aria-label="User Menu">A</button>
+    <!-- COMING SOON -->
+    <button class="nav-btn btn-coming-soon" data-feature="Messenger"><i class="fab fa-facebook-messenger"></i><span class="nav-badge"></span></button>
+    <button class="nav-btn btn-coming-soon" data-feature="Notifications"><i class="far fa-bell"></i><span class="nav-badge"></span></button>
+    
+    <!-- WORKING: User Menu -->
+    <div style="position:relative" id="userMenuWrapper">
+      <button class="user-avatar-nav" id="userAvatarBtn" aria-label="User Menu">U</button>
       <div class="dropdown-menu" id="userDropdownMenu" role="menu">
-        <div class="menu-item" role="menuitem"><i class="fas fa-user-circle"></i> Your Profile</div>
-        <div class="menu-item" role="menuitem"><i class="fas fa-cog"></i> Account Settings</div>
-        <div class="menu-item" role="menuitem"><i class="fas fa-question-circle"></i> Help Center</div>
-        <div class="menu-divider"></div>
-        <div class="menu-item danger-item" id="logoutMenuItem" role="menuitem"><i class="fas fa-sign-out-alt"></i> Log Out</div>
+        <div class="dropdown-item btn-coming-soon" data-feature="Your Profile"><i class="fas fa-user-circle"></i> Your Profile</div>
+        <div class="dropdown-item btn-coming-soon" data-feature="Settings"><i class="fas fa-cog"></i> Settings</div>
+        <div class="dropdown-item btn-coming-soon" data-feature="Help & Support"><i class="fas fa-question-circle"></i> Help & Support</div>
+        <div class="dropdown-divider"></div>
+        <div class="dropdown-item dropdown-item-danger" id="btnLogout"><i class="fas fa-sign-out-alt"></i> Log Out</div>
       </div>
     </div>
   </nav>
 </header>
 
 <!-- MAIN CONTENT -->
-<main class="main-content" role="main">
-  <div id="pinsGrid" class="masonry-grid"></div>
+<main class="main-layout" role="main">
   
-  <div id="loadingIndicator" class="loading-indicator" style="display:none;">
-    <div class="spinner-element"></div>
-  </div>
+  <!-- Create Post Box -->
+  <section class="create-post-container" aria-label="Create Post">
+    <div class="create-post-top">
+      <div class="create-avatar" id="currentUserAvatar">U</div>
+      <input type="text" class="create-input-trigger" readonly placeholder="What's on your mind?" id="triggerCreatePost"/>
+    </div>
+    <div class="create-divider"></div>
+    <div class="create-actions-row">
+      <button class="create-action-item video-icon btn-coming-soon" data-feature="Live Video"><i class="fas fa-video"></i> Live Video <span class="coming-soon-badge">•••</span></button>
+      <button class="create-action-item photo-icon" id="btnPhotoVideoUpload"><i class="fas fa-images"></i> Photo/Video</button>
+      <button class="create-action-item feeling-icon btn-coming-soon" data-feature="Feeling/Activity"><i class="far fa-smile"></i> Feeling <span class="coming-soon-badge">•••</span></button>
+    </div>
+  </section>
+
+  <!-- Feed Container -->
+  <section id="feedContainer" aria-label="News Feed"></section>
   
-  <div id="skeletonLoader" class="masonry-grid" style="display:none;">
-    <div class="skeleton-card"><div class="skeleton-loader" style="height:280px"></div></div>
-    <div class="skeleton-card"><div class="skeleton-loader" style="height:340px"></div></div>
-    <div class="skeleton-card"><div class="skeleton-loader" style="height:300px"></div></div>
-    <div class="skeleton-card"><div class="skeleton-loader" style="height:380px"></div></div>
-    <div class="skeleton-card"><div class="skeleton-loader" style="height:260px"></div></div>
-    <div class="skeleton-card"><div class="skeleton-loader" style="height:350px"></div></div>
-    <div class="skeleton-card"><div class="skeleton-loader" style="height:310px"></div></div>
-    <div class="skeleton-card"><div class="skeleton-loader" style="height:330px"></div></div>
-    <div class="skeleton-card"><div class="skeleton-loader" style="height:290px"></div></div>
-    <div class="skeleton-card"><div class="skeleton-loader" style="height:370px"></div></div>
-    <div class="skeleton-card"><div class="skeleton-loader" style="height:270px"></div></div>
-    <div class="skeleton-card"><div class="skeleton-loader" style="height:320px"></div></div>
-    <div class="skeleton-card"><div class="skeleton-loader" style="height:360px"></div></div>
-    <div class="skeleton-card"><div class="skeleton-loader" style="height:250px"></div></div>
+  <!-- Loading Indicator -->
+  <div id="loadingIndicator" class="loading-spinner-box" style="display:none;"><div class="spinner-circle"></div></div>
+  
+  <!-- End of Feed Message -->
+  <div id="endOfFeedMessage" class="end-of-feed-msg" style="display:none;">
+    <i class="fas fa-check-circle"></i>You're all caught up!
   </div>
 
-  <div id="endOfContentMessage" class="end-message" style="display:none;">
-    <i class="fas fa-check-circle"></i>
-    You've seen it all!
-  </div>
 </main>
 
 <!-- UPLOAD MODAL -->
-<div class="modal-backdrop" id="uploadModal" role="dialog" aria-modal="true" aria-labelledby="uploadModalTitle">
-  <div class="modal-dialog" onclick="event.stopPropagation()">
-    <div class="modal-header">
-      <h2 class="modal-heading" id="uploadModalTitle">Create Pin</h2>
-      <button class="close-modal-btn" id="closeUploadModalBtn" aria-label="Close modal">
-        <i class="fas fa-times"></i>
-      </button>
+<div class="modal-backdrop-layer" id="uploadModal" role="dialog" aria-modal="true">
+  <div class="modal-window" onclick="event.stopPropagation()">
+    <div class="modal-header-section">
+      <h2 class="modal-title-heading">Create Post</h2>
+      <button class="close-modal-x" id="closeModalBtn"><i class="fas fa-times"></i></button>
     </div>
     
     <form id="uploadFormElement" novalidate>
-      <div class="form-field">
-        <label class="form-label" for="pinTitleInput">Title</label>
-        <input type="text" id="pinTitleInput" class="text-input" placeholder="Add a descriptive title" maxlength="100"/>
+      <div class="form-field-group">
+        <label class="form-label-text" for="postTitleInput">Post Title ✨</label>
+        <input type="text" class="text-input-field" id="postTitleInput" placeholder="Add a catchy title for your post..." maxlength="200"/>
       </div>
       
-      <div class="form-field">
-        <label class="form-label">Media File</label>
+      <div class="form-field-group">
+        <label class="form-label-text" for="captionInput">Say something about this...</label>
+        <textarea class="text-input-field" id="captionInput" placeholder="Write a caption..." maxlength="2200"></textarea>
+      </div>
+      
+      <div class="form-field-group">
+        <label class="form-label-text">Add Photos or Videos</label>
         
-        <div class="upload-dropzone" id="uploadDropzone">
-          <i class="fas fa-cloud-upload-alt upload-icon-large" id="uploadIconDisplay"></i>
-          <p class="upload-main-text" id="uploadMainText">Click to upload or drag & drop</p>
-          <p class="upload-sub-text" id="uploadSubText">PNG, JPG, GIF, MP4 up to 20MB</p>
+        <div class="dropzone-area" id="dropzoneArea">
+          <i class="fas fa-cloud-upload-alt upload-cloud-icon" id="uploadIconDisplay"></i>
+          <p class="upload-text-main-line" id="uploadTextMain">Drag photos or videos here</p>
+          <p class="upload-text-sub-line" id="uploadTextSub">or click to browse files</p>
           <input type="file" id="fileInputElement" class="hidden-file-input" accept="image/*,video/*"/>
         </div>
         
-        <div class="file-preview-area" id="filePreviewArea">
-          <div class="preview-media-container" id="previewContainer"></div>
-          <div class="file-metadata-display">
-            <div class="file-type-indicator" id="fileTypeIcon"><i class="fas fa-image"></i></div>
-            <div class="file-details-text">
-              <p class="file-name-display" id="fileNameDisplay">filename.jpg</p>
-              <p class="file-size-display" id="fileSizeDisplay">0 KB</p>
+        <div class="preview-section-area" id="previewSectionArea">
+          <div class="preview-media-container" id="previewMediaBox"></div>
+          <div class="file-info-strip">
+            <div class="file-type-icon-badge" id="fileTypeBadge"><i class="fas fa-image"></i></div>
+            <div class="file-details-column">
+              <p class="file-name-text" id="fileNameText">filename.jpg</p>
+              <p class="file-size-text" id="fileSizeText">0 KB</p>
             </div>
-            <button type="button" class="change-file-btn" id="changeFileBtn">Change File</button>
+            <button type="button" class="change-file-button" id="changeFileBtn">Change</button>
           </div>
         </div>
         
-        <div class="upload-progress-section" id="uploadProgressSection">
+        <div class="progress-section-area" id="progressSectionArea">
           <div class="progress-header-row">
-            <div class="status-indicator-group">
-              <div class="status-spinner-small" id="progressSpinnerIcon"></div>
-              <span class="status-label-text" id="progressStatusText">Preparing...</span>
+            <div class="progress-status-info">
+              <div class="spinner-mini-icon" id="spinnerMiniIcon"></div>
+              <span class="status-text-label" id="statusTextLabel">Preparing...</span>
             </div>
-            <span class="percentage-value" id="progressPercentageValue">0%</span>
+            <span class="percentage-text-value" id="percentageTextValue">0%</span>
           </div>
-          <div class="progress-bar-outer">
-            <div class="progress-bar-inner" id="progressBarInner"></div>
-          </div>
+          <div class="outer-progress-bar"><div class="inner-progress-fill" id="innerProgressFill"></div></div>
           <div class="progress-details-row">
-            <span id="progressSpeedInfo"><i class="fas fa-arrow-up"></i> Initializing...</span>
-            <span id="progressTimeInfo"><i class="fas fa-clock"></i> Please wait...</span>
+            <span id="speedInfoText"><i class="fas fa-arrow-up"></i> Initializing...</span>
+            <span id="timeInfoText"><i class="fas fa-clock"></i> Please wait...</span>
           </div>
         </div>
       </div>
       
-      <div class="modal-footer-actions">
-        <button type="button" class="action-button button-secondary" id="cancelUploadBtn">Cancel</button>
-        <button type="submit" class="action-button button-primary" id="submitUploadBtn" disabled>
-          <i class="fas fa-cloud-upload-alt"></i> Create Pin
-        </button>
+      <div class="modal-footer-buttons">
+        <button type="button" class="btn-modal btn-modal-secondary" id="cancelBtn">Cancel</button>
+        <button type="submit" class="btn-modal btn-modal-primary" id="submitBtn" disabled><i class="fas fa-paper-plane"></i> Post</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- EDIT POST MODAL -->
+<div class="modal-backdrop-layer" id="editPostModal" role="dialog" aria-modal="true">
+  <div class="modal-window" onclick="event.stopPropagation()">
+    <div class="modal-header-section">
+      <h2 class="modal-title-heading">✏️ Edit Post</h2>
+      <button class="close-modal-x" id="closeEditModalBtn"><i class="fas fa-times"></i></button>
+    </div>
+    
+    <form id="editPostFormElement" novalidate>
+      <input type="hidden" id="editPostId"/>
+      
+      <div class="form-field-group">
+        <label class="form-label-text" for="editTitleInput">Post Title</label>
+        <input type="text" class="text-input-field" id="editTitleInput" placeholder="Add a title..."/>
+      </div>
+      
+      <div class="form-field-group">
+        <label class="form-label-text" for="editCaptionInput">Caption</label>
+        <textarea class="text-input-field" id="editCaptionInput" placeholder="Write a caption..."></textarea>
+      </div>
+      
+      <div class="modal-footer-buttons">
+        <button type="button" class="btn-modal btn-modal-secondary" id="cancelEditBtn">Cancel</button>
+        <button type="submit" class="btn-modal btn-modal-primary" id="saveEditBtn"><i class="fas fa-save"></i> Save Changes</button>
       </div>
     </form>
   </div>
 </div>
 
 <!-- PREVIEW MODAL -->
-<div class="preview-modal-overlay" id="previewModal" role="dialog" aria-modal="true">
+<div class="fullscreen-preview-modal" id="previewModal" role="dialog" aria-modal="true">
   <div class="preview-content-wrapper" onclick="event.stopPropagation()">
-    <button class="close-preview-button" id="closePreviewBtn" aria-label="Close preview">
-      <i class="fas fa-times"></i>
-    </button>
-    <div class="preview-media-display" id="previewMediaContainer"></div>
+    <button class="close-preview-button" id="closePreviewBtn"><i class="fas fa-times"></i></button>
+    <div class="preview-media-display" id="previewMediaDisplayBox"></div>
     <div class="preview-action-buttons">
-      <button class="preview-action-btn download-action-btn" id="downloadPreviewBtn">
-        <i class="fas fa-download"></i> Download
-      </button>
-      <button class="preview-action-btn save-action-btn" id="savePreviewBtn">
-        <i class="fas fa-bookmark"></i> Save
-      </button>
+      <button class="preview-action-btn download-preview-btn" id="downloadBtn"><i class="fas fa-download"></i> Download</button>
+      <button class="preview-action-btn save-preview-btn btn-coming-soon" data-feature="Save to Collection"><i class="fas fa-bookmark"></i> Save <span class="coming-soon-badge">•••</span></button>
     </div>
   </div>
 </div>
 
+<!-- COMING SOON MODAL -->
+<div class="coming-soon-modal" id="comingSoonModal">
+  <div class="coming-soon-dialog">
+    <i class="fas fa-rocket coming-soon-icon"></i>
+    <h3 class="coming-soon-title" id="comingSoonFeatureName">Coming Soon!</h3>
+    
+    <button class="coming-soon-close-btn" id="closeComingSoonBtn">Got it! </button>
+  </div>
+</div>
+
+<!-- TOAST -->
 <div class="toast-notification" id="toastNotification" role="alert" aria-live="polite"></div>
 
+<!-- JAVASCRIPT -->
 <script>
 'use strict';
 
-// ==================== CONFIGURATION ====================
-const APP_CONFIG = {
-  API_ENDPOINT: 'https://pinterest-clone-c9rz.onrender.com/api',
-  DEBOUNCE_DELAY: 150,
-  SCROLL_THRESHOLD: 400,
-  TOAST_DISPLAY_TIME: 3000,
-  MAX_FILE_SIZE_BYTES: 20 * 1024 * 1024,
-  ACCEPTED_FILE_TYPES: ['image/jpeg','image/png','image/gif','image/webp','video/mp4','video/webm'],
-  RANDOM_HEIGHTS: [240,280,320,360,400,260,300,340,380],
-  BROKEN_PINS_STORAGE_KEY: 'pinterest_broken_pins_cache',
-  MAX_RETRIES: 2,
-  RETRY_DELAY: 1000
+// ============================================================
+// CONFIGURATION
+// ============================================================
+var CONFIG = {
+  API_ENDPOINT: 'http://localhost:5000/api',
+  MAX_FILE_SIZE: 50 * 1024 * 1024,
+  ACCEPTED_TYPES: ['image/jpeg','image/png','image/gif','image/webp','video/mp4','video/webm','video/quicktime'],
+  TOAST_DURATION: 3000,
+  SCROLL_THRESHOLD: 350,
+  AUTO_CLOSE_DELAY: 1200,
+  SUCCESS_DISPLAY_DELAY: 800
 };
 
-// ==================== APPLICATION STATE ====================
-const appState = {
-  authToken: localStorage.getItem('token') || '',
+// ============================================================
+// STATE
+// ============================================================
+var State = {
+  token: localStorage.getItem('token') || '',
+  currentUser: JSON.parse(localStorage.getItem('currentUser') || 'null'),
   currentPage: 1,
-  isLoadingData: false,
-  isUploadingFile: false,
-  selectedFileObject: null,
-  currentPreviewData: null,
-  brokenPinsSet: new Set(JSON.parse(localStorage.getItem(APP_CONFIG.BROKEN_PINS_STORAGE_KEY) || '[]')),
+  isLoading: false,
+  isUploading: false,
+  selectedFile: null,
+  previewData: null,
   hasMorePages: true,
-  isScrollListenerActive: true,
-  lastScrollPosition: 0,
-  scrollThrottleTimer: null
+  scrollEnabled: true,
+  lastScrollY: 0,
+  autoCloseTimer: null
 };
 
-// Persist broken pins to localStorage
-function persistBrokenPins() {
-  localStorage.setItem(APP_CONFIG.BROKEN_PINS_STORAGE_KEY, JSON.stringify([...appState.brokenPinsSet]));
-}
-
-// ==================== DOM ELEMENT CACHE ====================
-const domElements = {
-  pinsGrid: document.getElementById('pinsGrid'),
-  loadingIndicator: document.getElementById('loadingIndicator'),
-  skeletonLoader: document.getElementById('skeletonLoader'),
-  endOfContentMessage: document.getElementById('endOfContentMessage'),
-  toastNotification: document.getElementById('toastNotification'),
-  uploadModal: document.getElementById('uploadModal'),
-  uploadFormElement: document.getElementById('uploadFormElement'),
-  closeUploadModalBtn: document.getElementById('closeUploadModalBtn'),
-  cancelUploadBtn: document.getElementById('cancelUploadBtn'),
-  submitUploadBtn: document.getElementById('submitUploadBtn'),
-  pinTitleInput: document.getElementById('pinTitleInput'),
-  uploadDropzone: document.getElementById('uploadDropzone'),
-  fileInputElement: document.getElementById('fileInputElement'),
-  filePreviewArea: document.getElementById('filePreviewArea'),
-  previewContainer: document.getElementById('previewContainer'),
-  fileTypeIcon: document.getElementById('fileTypeIcon'),
-  fileNameDisplay: document.getElementById('fileNameDisplay'),
-  fileSizeDisplay: document.getElementById('fileSizeDisplay'),
-  changeFileBtn: document.getElementById('changeFileBtn'),
-  uploadIconDisplay: document.getElementById('uploadIconDisplay'),
-  uploadMainText: document.getElementById('uploadMainText'),
-  uploadSubText: document.getElementById('uploadSubText'),
-  uploadProgressSection: document.getElementById('uploadProgressSection'),
-  progressSpinnerIcon: document.getElementById('progressSpinnerIcon'),
-  progressStatusText: document.getElementById('progressStatusText'),
-  progressPercentageValue: document.getElementById('progressPercentageValue'),
-  progressBarInner: document.getElementById('progressBarInner'),
-  progressSpeedInfo: document.getElementById('progressSpeedInfo'),
-  progressTimeInfo: document.getElementById('progressTimeInfo'),
-  previewModal: document.getElementById('previewModal'),
-  previewMediaContainer: document.getElementById('previewMediaContainer'),
-  closePreviewBtn: document.getElementById('closePreviewBtn'),
-  downloadPreviewBtn: document.getElementById('downloadPreviewBtn'),
-  savePreviewBtn: document.getElementById('savePreviewBtn'),
-  userDropdownMenu: document.getElementById('userDropdownMenu'),
-  avatarButton: document.getElementById('avatarButton'),
-  logoutMenuItem: document.getElementById('logoutMenuItem'),
-  createPinBtn: document.getElementById('createPinBtn')
-};
-
-// ==================== SECURITY UTILITIES ====================
-const SecurityUtils = {
-  escapeHtmlString(rawString) {
-    if (!rawString) return '';
-    const tempDiv = document.createElement('div');
-    tempDiv.textContent = rawString;
-    return tempDiv.innerHTML;
+// ============================================================
+// UTILITIES
+// ============================================================
+var Utils = {
+  escapeHtml: function(str) {
+    if (!str) return '';
+    var div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
   },
   
-  sanitizeUrl(urlString) {
-    if (!urlString) return '';
+  sanitizeUrl: function(url) {
+    if (!url) return '';
     try {
-      const parsedUrl = new URL(urlString);
-      return ['http:', 'https:'].includes(parsedUrl.protocol) ? urlString : '';
-    } catch (error) {
-      return '';
-    }
+      var u = new URL(url);
+      return ['http:', 'https:'].includes(u.protocol) ? url : '';
+    } catch(e) { return ''; }
   },
   
-  isValidUrlFormat(urlString) {
-    if (!urlString) return false;
+  isValidUrl: function(url) {
+    if (!url) return false;
     try {
-      const parsedUrl = new URL(urlString);
-      return parsedUrl.hostname && parsedUrl.protocol.startsWith('http');
-    } catch (error) {
-      return false;
-    }
+      var u = new URL(url);
+      return u.hostname && u.protocol.startsWith('http');
+    } catch(e) { return false; }
   },
-
-  extractPinIdFromUrl(urlString) {
-    if (!urlString) return null;
-    try {
-      const urlParts = urlString.split('/');
-      const filename = urlParts[urlParts.length - 1];
-      return filename.split('?')[0].split('#')[0];
-    } catch (error) {
-      return urlString;
-    }
-  }
-};
-
-// ==================== GENERAL UTILITIES ====================
-const UtilityHelpers = {
-  formatFileSize(bytes) {
+  
+  formatFileSize: function(bytes) {
     if (!bytes) return '0 B';
-    const sizeUnits = ['B', 'KB', 'MB', 'GB'];
-    const unitIndex = Math.floor(Math.log(bytes) / Math.log(1024));
-    return `${(bytes / Math.pow(1024, unitIndex)).toFixed(unitIndex > 0 ? 1 : 0)} ${sizeUnits[unitIndex]}`;
+    var units = ['B', 'KB', 'MB', 'GB'];
+    var i = Math.floor(Math.log(bytes) / Math.log(1024));
+    return (bytes / Math.pow(1024, i)).toFixed(i > 0 ? 1 : 0) + ' ' + units[i];
   },
   
-  formatVideoDuration(seconds) {
-    if (!seconds || isNaN(seconds)) return '0:00';
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  formatDuration: function(sec) {
+    if (!sec || isNaN(sec)) return '0:00';
+    var m = Math.floor(sec / 60);
+    var s = Math.floor(sec % 60);
+    return m + ':' + s.toString().padStart(2, '0');
   },
   
-  generateRandomHeight() {
-    return APP_CONFIG.RANDOM_HEIGHTS[Math.floor(Math.random() * APP_CONFIG.RANDOM_HEIGHTS.length)] + 'px';
+  timeAgo: function(dateStr) {
+    var now = new Date();
+    var date = new Date(dateStr);
+    var diff = Math.floor((now - date) / 1000);
+    if (diff < 60) return 'Just now';
+    if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+    if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+    if (diff < 604800) return Math.floor(diff / 86400) + 'd ago';
+    return date.toLocaleDateString();
   },
   
-  debounceFunction(func, delayMs) {
-    let timeoutId;
-    return function(...args) {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => func.apply(this, args), delayMs);
+  getInitials: function(name) {
+    if (!name) return 'U';
+    return name.split(' ').map(function(n) { return n[0]; }).join('').toUpperCase().slice(0, 2);
+  },
+  
+  generateFakeStats: function() {
+    return {
+      likes: Math.floor(Math.random() * 500) + 10,
+      comments: Math.floor(Math.random() * 100) + 1,
+      shares: Math.floor(Math.random() * 50) + 1
     };
   },
   
-  throttleFunction(func, limitMs) {
-    let inThrottle = false;
-    return function(...args) {
+  debounce: function(fn, ms) {
+    var timer = null;
+    return function() {
+      var args = arguments;
+      var ctx = this;
+      clearTimeout(timer);
+      timer = setTimeout(function() { fn.apply(ctx, args); }, ms);
+    };
+  },
+  
+  throttle: function(fn, limit) {
+    var inThrottle = false;
+    return function() {
       if (!inThrottle) {
-        func.apply(this, args);
+        fn.apply(this, arguments);
         inThrottle = true;
-        setTimeout(() => inThrottle = false, limitMs);
+        setTimeout(function() { inThrottle = false; }, limit);
       }
     };
   }
 };
 
-// ==================== TOAST NOTIFICATION SYSTEM ====================
-const ToastNotification = {
-  autoHideTimer: null,
-  
-  showMessage(messageText, messageType = '') {
-    if (this.autoHideTimer) {
-      clearTimeout(this.autoHideTimer);
-    }
+// ============================================================
+// DOM CACHE
+// ============================================================
+var DOM = {};
+
+function cacheDOMElements() {
+  DOM = {
+    // Header
+    userAvatarBtn: document.getElementById('userAvatarBtn'),
+    userDropdownMenu: document.getElementById('userDropdownMenu'),
+    currentUserAvatar: document.getElementById('currentUserAvatar'),
+    btnLogout: document.getElementById('btnLogout'),
+    btnCreatePost: document.getElementById('btnCreatePost'),
+    triggerCreatePost: document.getElementById('triggerCreatePost'),
+    btnPhotoVideoUpload: document.getElementById('btnPhotoVideoUpload'),
     
-    domElements.toastNotification.textContent = messageText;
-    domElements.toastNotification.className = `toast-notification visible${messageType ? ' error-type' : ''}`;
+    // Feed
+    feedContainer: document.getElementById('feedContainer'),
+    loadingIndicator: document.getElementById('loadingIndicator'),
+    endOfFeedMessage: document.getElementById('endOfFeedMessage'),
     
-    this.autoHideTimer = setTimeout(() => {
-      domElements.toastNotification.classList.remove('visible');
-    }, APP_CONFIG.TOAST_DISPLAY_TIME);
-  }
-};
-
-// ==================== AUTHENTICATION CHECK ====================
-if (!appState.authToken) {
-  window.location.href = 'login.html';
-}
-
-// ==================== USER MENU HANDLING ====================
-function toggleUserMenu(event) {
-  event?.stopPropagation();
-  domElements.userDropdownMenu.classList.toggle('active');
-}
-
-document.addEventListener('click', (event) => {
-  if (!event.target.closest('#userMenuContainer')) {
-    domElements.userDropdownMenu.classList.remove('active');
-  }
-});
-
-domElements.logoutMenuItem.addEventListener('click', () => {
-  localStorage.removeItem('token');
-  ToastNotification.showMessage('Successfully logged out!');
-  setTimeout(() => window.location.href = 'login.html', 800);
-});
-
-domElements.avatarButton.addEventListener('click', toggleUserMenu);
-
-// ==================== UPLOAD MODAL MANAGEMENT ====================
-function openUploadModal() {
-  domElements.uploadModal.classList.add('visible');
-  document.body.style.overflow = 'hidden';
-  domElements.userDropdownMenu.classList.remove('active');
-}
-
-function closeUploadModal() {
-  if (appState.isUploadingFile) {
-    ToastNotification.showMessage('Please wait for upload to complete', 'error');
-    return;
-  }
-  resetUploadForm();
-  domElements.uploadModal.classList.remove('visible');
-  document.body.style.overflow = '';
-}
-
-function resetUploadForm() {
-  domElements.uploadFormElement.reset();
-  domElements.fileInputElement.value = '';
-  appState.selectedFileObject = null;
-  appState.isUploadingFile = false;
-  
-  domElements.uploadDropzone.className = 'upload-dropzone';
-  domElements.uploadIconDisplay.className = 'fas fa-cloud-upload-alt upload-icon-large';
-  domElements.uploadIconDisplay.style.color = '';
-  domElements.uploadMainText.textContent = 'Click to upload or drag & drop';
-  domElements.uploadMainText.style.cssText = '';
-  domElements.uploadSubText.textContent = 'PNG, JPG, GIF, MP4 up to 20MB';
-  domElements.filePreviewArea.classList.remove('visible');
-  domElements.previewContainer.innerHTML = '';
-  domElements.uploadProgressSection.classList.remove('visible', 'success-state', 'error-state');
-  domElements.submitUploadBtn.disabled = true;
-  domElements.submitUploadBtn.classList.remove('button-loading');
-  domElements.submitUploadBtn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Create Pin';
-  domElements.cancelUploadBtn.textContent = 'Cancel';
-  domElements.cancelUploadBtn.disabled = false;
-  domElements.closeUploadModalBtn.disabled = false;
-  domElements.changeFileBtn.disabled = false;
-  domElements.pinTitleInput.disabled = false;
-}
-
-domElements.createPinBtn.addEventListener('click', openUploadModal);
-domElements.closeUploadModalBtn.addEventListener('click', closeUploadModal);
-domElements.cancelUploadBtn.addEventListener('click', closeUploadModal);
-domElements.uploadModal.addEventListener('click', (event) => {
-  if (event.target === domElements.uploadModal) closeUploadModal();
-});
-
-// FILE SELECTION HANDLING
-domElements.uploadDropzone.addEventListener('click', () => domElements.fileInputElement.click());
-domElements.changeFileBtn.addEventListener('click', () => domElements.fileInputElement.click());
-
-domElements.fileInputElement.addEventListener('change', (event) => processSelectedFile(event.target));
-
-function processSelectedFile(inputElement) {
-  const file = inputElement.files[0];
-  if (!file) return;
-  
-  // Validate file size
-  if (file.size > APP_CONFIG.MAX_FILE_SIZE_BYTES) {
-    ToastNotification.showMessage(`File size exceeds limit (${APP_CONFIG.MAX_FILE_SIZE_BYTES / 1024 / 1024}MB max)`, 'error');
-    inputElement.value = '';
-    return;
-  }
-  
-  appState.selectedFileObject = file;
-  domElements.uploadDropzone.classList.add('has-file-selected');
-  domElements.uploadIconDisplay.className = 'fas fa-check-circle upload-icon-large';
-  domElements.uploadIconDisplay.style.color = '#00C853';
-  domElements.uploadMainText.textContent = 'File selected successfully!';
-  domElements.uploadMainText.style.fontWeight = '600';
-  domElements.uploadMainText.style.color = '#00C853';
-  domElements.uploadSubText.textContent = 'Click "Change File" to select a different file';
-  domElements.fileNameDisplay.textContent = SecurityUtils.escapeHtmlString(file.name);
-  domElements.fileSizeDisplay.textContent = UtilityHelpers.formatFileSize(file.size);
-  
-  if (file.type.startsWith('video/')) {
-    domElements.fileTypeIcon.innerHTML = '<i class="fas fa-video"></i>';
-    const videoObjectUrl = URL.createObjectURL(file);
-    domElements.previewContainer.innerHTML = `
-      <video src="${videoObjectUrl}" class="preview-video-element" controls preload="metadata"></video>
-      <button type="button" class="delete-file-btn" title="Remove file"><i class="fas fa-times"></i></button>
-    `;
+    // Upload Modal
+    uploadModal: document.getElementById('uploadModal'),
+    closeModalBtn: document.getElementById('closeModalBtn'),
+    cancelBtn: document.getElementById('cancelBtn'),
+    submitBtn: document.getElementById('submitBtn'),
+    postTitleInput: document.getElementById('postTitleInput'),
+    captionInput: document.getElementById('captionInput'),
+    dropzoneArea: document.getElementById('dropzoneArea'),
+    fileInputElement: document.getElementById('fileInputElement'),
+    previewSectionArea: document.getElementById('previewSectionArea'),
+    previewMediaBox: document.getElementById('previewMediaBox'),
+    fileTypeBadge: document.getElementById('fileTypeBadge'),
+    fileNameText: document.getElementById('fileNameText'),
+    fileSizeText: document.getElementById('fileSizeText'),
+    changeFileBtn: document.getElementById('changeFileBtn'),
+    uploadIconDisplay: document.getElementById('uploadIconDisplay'),
+    uploadTextMain: document.getElementById('uploadTextMain'),
+    uploadTextSub: document.getElementById('uploadTextSub'),
+    progressSectionArea: document.getElementById('progressSectionArea'),
+    spinnerMiniIcon: document.getElementById('spinnerMiniIcon'),
+    statusTextLabel: document.getElementById('statusTextLabel'),
+    percentageTextValue: document.getElementById('percentageTextValue'),
+    innerProgressFill: document.getElementById('innerProgressFill'),
+    speedInfoText: document.getElementById('speedInfoText'),
+    timeInfoText: document.getElementById('timeInfoText'),
+    uploadFormElement: document.getElementById('uploadFormElement'),
     
-    const videoElement = document.createElement('video');
-    videoElement.preload = 'metadata';
-    videoElement.onloadedmetadata = () => {
-      domElements.fileSizeDisplay.textContent = `${UtilityHelpers.formatFileSize(file.size)} • ${UtilityHelpers.formatVideoDuration(videoElement.duration)}`;
-      URL.revokeObjectURL(videoElement.src);
-    };
-    videoElement.src = videoObjectUrl;
-  } else {
-    domElements.fileTypeIcon.innerHTML = '<i class="fas fa-image"></i>';
-    const fileReader = new FileReader();
-    fileReader.onload = (readEvent) => {
-      domElements.previewContainer.innerHTML = `
-        <img src="${readEvent.target.result}" alt="${SecurityUtils.escapeHtmlString(file.name)}" class="preview-image-element"/>
-        <button type="button" class="delete-file-btn" title="Remove file"><i class="fas fa-times"></i></button>
-      `;
-      const imgElement = new Image();
-      imgElement.onload = () => {
-        domElements.fileSizeDisplay.textContent = `${UtilityHelpers.formatFileSize(file.size)} • ${imgElement.width}×${imgElement.height}`;
-      };
-      imgElement.src = readEvent.target.result;
-    };
-    fileReader.readAsDataURL(file);
-  }
-  
-  domElements.filePreviewArea.classList.add('visible');
-  domElements.submitUploadBtn.disabled = false;
-  
-  // Attach remove button listener
-  const removeButton = domElements.previewContainer.querySelector('.delete-file-btn');
-  if (removeButton) {
-    removeButton.addEventListener('click', clearSelectedFile);
-  }
-}
-
-function clearSelectedFile() {
-  domElements.fileInputElement.value = '';
-  appState.selectedFileObject = null;
-  domElements.uploadDropzone.className = 'upload-dropzone';
-  domElements.uploadIconDisplay.className = 'fas fa-cloud-upload-alt upload-icon-large';
-  domElements.uploadIconDisplay.style.color = '';
-  domElements.uploadMainText.textContent = 'Click to upload or drag & drop';
-  domElements.uploadMainText.style.cssText = '';
-  domElements.uploadSubText.textContent = 'PNG, JPG, GIF, MP4 up to 20MB';
-  domElements.filePreviewArea.classList.remove('visible');
-  domElements.previewContainer.innerHTML = '';
-  domElements.submitUploadBtn.disabled = true;
-}
-
-// PROGRESS TRACKING SYSTEM
-function initializeProgressDisplay() {
-  domElements.uploadProgressSection.classList.remove('success-state', 'error-state');
-  domElements.uploadProgressSection.classList.add('visible');
-  domElements.progressSpinnerIcon.className = 'status-spinner-small';
-  domElements.progressSpinnerIcon.innerHTML = '';
-  domElements.progressStatusText.textContent = 'Preparing...';
-  domElements.progressPercentageValue.textContent = '0%';
-  domElements.progressBarInner.style.width = '0%';
-  domElements.progressSpeedInfo.innerHTML = '<i class="fas fa-arrow-up"></i> Initializing...';
-  domElements.progressTimeInfo.innerHTML = '<i class="fas fa-clock"></i> Please wait...';
-}
-
-function updateProgressDisplay(percentage, speed, estimatedTime) {
-  domElements.progressPercentageValue.textContent = `${Math.round(percentage)}%`;
-  domElements.progressBarInner.style.width = `${percentage}%`;
-  
-  if (percentage >= 100) {
-    domElements.progressStatusText.textContent = 'Processing...';
-  } else if (percentage >= 85) {
-    domElements.progressStatusText.textContent = 'Almost done...';
-  } else {
-    domElements.progressStatusText.textContent = 'Uploading...';
-  }
-  
-  if (speed) {
-    domElements.progressSpeedInfo.innerHTML = `<i class="fas fa-arrow-up"></i> ${speed}/s`;
-  }
-  if (estimatedTime && percentage > 0 && percentage < 100) {
-    domElements.progressTimeInfo.innerHTML = `<i class="fas fa-clock"></i> ${estimatedTime} remaining`;
-  } else if (percentage >= 100) {
-    domElements.progressTimeInfo.innerHTML = '<i class="fas fa-clock"></i> Finalizing...';
-  }
-}
-
-function showSuccessState() {
-  domElements.uploadProgressSection.classList.add('success-state');
-  domElements.progressSpinnerIcon.className = 'status-spinner-small completed';
-  domElements.progressSpinnerIcon.innerHTML = '<i class="fas fa-check"></i>';
-  domElements.progressStatusText.textContent = 'Complete!';
-  domElements.progressPercentageValue.textContent = '100%';
-  domElements.progressBarInner.style.width = '100%';
-  domElements.progressSpeedInfo.innerHTML = '<i class="fas fa-check-circle"></i> <span style="color:#00C853">Success!</span>';
-  domElements.progressTimeInfo.innerHTML = '<i class="fas fa-clock"></i> Done';
-}
-
-function showErrorState(errorMessage) {
-  domElements.uploadProgressSection.classList.add('error-state');
-  domElements.progressSpinnerIcon.style.background = '#DC2626';
-  domElements.progressSpinnerIcon.innerHTML = '<i class="fas fa-exclamation"></i>';
-  domElements.progressStatusText.textContent = errorMessage || 'Upload failed';
-  domElements.progressSpeedInfo.innerHTML = '<i class="fas fa-exclamation-triangle"></i> <span style="color:#DC2626">Error occurred</span>';
-  domElements.progressTimeInfo.innerHTML = '<i class="fas fa-redo"></i> Try again';
-}
-
-function setUILockedState(isLocked) {
-  appState.isUploadingFile = isLocked;
-  domElements.uploadDropzone.classList.toggle('is-uploading', isLocked);
-  domElements.submitUploadBtn.disabled = isLocked;
-  domElements.submitUploadBtn.classList.toggle('button-loading', isLocked);
-  domElements.cancelUploadBtn.disabled = isLocked;
-  domElements.cancelUploadBtn.textContent = isLocked ? 'Uploading...' : 'Cancel';
-  domElements.closeUploadModalBtn.disabled = isLocked;
-  domElements.pinTitleInput.disabled = isLocked;
-  domElements.changeFileBtn.disabled = isLocked;
-  if (isLocked) initializeProgressDisplay();
-}
-
-// UPLOAD SUBMISSION HANDLER
-domElements.uploadFormElement.addEventListener('submit', async (submitEvent) => {
-  submitEvent.preventDefault();
-  
-  if (!appState.selectedFileObject) {
-    ToastNotification.showMessage('Please select a file first', 'error');
-    return;
-  }
-  
-  setUILockedState(true);
-  
-  const formData = new FormData();
-  formData.append('file', appState.selectedFileObject);
-  formData.append('title', SecurityUtils.escapeHtmlString(domElements.pinTitleInput.value.trim()));
-  
-  try {
-    const xhrRequest = new XMLHttpRequest();
+    // Edit Post Modal
+    editPostModal: document.getElementById('editPostModal'),
+    closeEditModalBtn: document.getElementById('closeEditModalBtn'),
+    cancelEditBtn: document.getElementById('cancelEditBtn'),
+    saveEditBtn: document.getElementById('saveEditBtn'),
+    editPostFormElement: document.getElementById('editPostFormElement'),
+    editPostId: document.getElementById('editPostId'),
+    editTitleInput: document.getElementById('editTitleInput'),
+    editCaptionInput: document.getElementById('editCaptionInput'),
     
-    xhrRequest.upload.onprogress = (progressEvent) => {
-      if (progressEvent.lengthComputable) {
-        const percentageComplete = (progressEvent.loaded / progressEvent.total) * 100;
-        const elapsedTime = (Date.now() - startTime) / 1000;
-        const currentSpeed = UtilityHelpers.formatFileSize(progressEvent.loaded / Math.max(elapsedTime, 0.001));
-        updateProgressDisplay(percentageComplete, currentSpeed, '');
-      }
-    };
+    // Preview Modal
+    previewModal: document.getElementById('previewModal'),
+    previewMediaDisplayBox: document.getElementById('previewMediaDisplayBox'),
+    closePreviewBtn: document.getElementById('closePreviewBtn'),
+    downloadBtn: document.getElementById('downloadBtn'),
     
-    const startTime = Date.now();
+    // Coming Soon Modal
+    comingSoonModal: document.getElementById('comingSoonModal'),
+    comingSoonFeatureName: document.getElementById('comingSoonFeatureName'),
+    comingSoonDescription: document.getElementById('comingSoonDescription'),
+    closeComingSoonBtn: document.getElementById('closeComingSoonBtn'),
     
-    await new Promise((resolvePromise, rejectPromise) => {
-      xhrRequest.onload = resolvePromise;
-      xhrRequest.onerror = rejectPromise;
-      xhrRequest.open('POST', `${APP_CONFIG.API_ENDPOINT}/post/upload`);
-      xhrRequest.setRequestHeader('Authorization', appState.authToken);
-      xhrRequest.send(formData);
-    });
-    
-    updateProgressDisplay(99, null, null);
-    await new Promise(resolveDelay => setTimeout(resolveDelay, 800));
-    showSuccessState();
-    
-    setTimeout(() => {
-      closeUploadModal();
-      fetchPinsData(true);
-      ToastNotification.showMessage('Pin created successfully! 🎉');
-    }, 1200);
-    
-  } catch (error) {
-    console.error('Upload error:', error);
-    showErrorState(error.message || 'Network error occurred');
-    setUILockedState(false);
-    ToastNotification.showMessage('Upload failed. Please try again.', 'error');
-  }
-});
-
-// ==================== PREVIEW MODAL MANAGEMENT ====================
-function openPreviewModal(mediaUrl, mediaType, mediaTitle) {
-  appState.currentPreviewData = { url: mediaUrl, type: mediaType, title: mediaTitle };
-  
-  if (mediaType === 'video') {
-    domElements.previewMediaContainer.innerHTML = `
-      <div class="fullsize-video-wrapper">
-        <video id="fullscreenVideoPlayer" src="${mediaUrl}" muted playsinline></video>
-        <div class="fullscreen-video-controls">
-          <div class="progress-bar-container" id="videoProgressBarTrack">
-            <div class="progress-bar-fill" id="videoProgressBarFill"></div>
-          </div>
-          <div class="video-control-buttons">
-            <div class="control-group-left">
-              <button class="video-control-btn" id="playPauseVideoBtn"><i class="fas fa-play"></i></button>
-              <button class="video-control-btn" id="muteUnmuteVideoBtn"><i class="fas fa-volume-mute"></i></button>
-              <input type="range" class="volume-slider" id="volumeControlSlider" value="0" min="0" max="1" step="0.1"/>
-              <span class="time-display" id="videoTimeDisplay">0:00 / 0:00</span>
-            </div>
-            <div class="control-group-right">
-              <button class="video-control-btn" id="fullscreenToggleBtn"><i class="fas fa-expand"></i></button>
-            </div>
-          </div>
-        </div>
-      </div>`;
-    initializeFullscreenVideoPlayer();
-  } else {
-    domElements.previewMediaContainer.innerHTML = `
-      <img src="${mediaUrl}" alt="${SecurityUtils.escapeHtmlString(mediaTitle)}" class="fullsize-preview-image" 
-           onerror="this.parentElement.innerHTML='<div class=\'broken-placeholder\'><i class=\'fas fa-unlink\'></i><p>Image unavailable</p><small>This file may have been removed</small></div>'"/>`;
-  }
-  
-  domElements.previewModal.classList.add('visible');
-  document.body.style.overflow = 'hidden';
-}
-
-function closePreviewModal() {
-  domElements.previewModal.classList.remove('visible');
-  document.body.style.overflow = '';
-  const videoPlayer = document.getElementById('fullscreenVideoPlayer');
-  if (videoPlayer) videoPlayer.pause();
-  appState.currentPreviewData = null;
-}
-
-function initializeFullscreenVideoPlayer() {
-  const videoEl = document.getElementById('fullscreenVideoPlayer');
-  const playPauseBtn = document.getElementById('playPauseVideoBtn');
-  const progressBarFill = document.getElementById('videoProgressBarFill');
-  const progressBarTrack = document.getElementById('videoProgressBarTrack');
-  const timeDisplay = document.getElementById('videoTimeDisplay');
-  const muteBtn = document.getElementById('muteUnmuteVideoBtn');
-  const volumeSlider = document.getElementById('volumeControlSlider');
-  const fullscreenBtn = document.getElementById('fullscreenToggleBtn');
-  
-  if (!videoEl) return;
-  
-  let isPlaying = false;
-  
-  const togglePlayPause = () => {
-    if (isPlaying) {
-      videoEl.pause();
-      playPauseBtn.innerHTML = '<i class="fas fa-play">';
-    } else {
-      videoEl.play();
-      playPauseBtn.innerHTML = '<i class="fas fa-pause">';
-    }
-    isPlaying = !isPlaying;
+    // Toast
+    toastNotification: document.getElementById('toastNotification')
   };
-  
-  videoEl.addEventListener('timeupdate', () => {
-    if (videoEl.duration) {
-      progressBarFill.style.width = `${(videoEl.currentTime / videoEl.duration) * 100}%`;
-      timeDisplay.textContent = `${UtilityHelpers.formatVideoDuration(videoEl.currentTime)} / ${UtilityHelpers.formatVideoDuration(videoEl.duration)}`;
-    }
-  });
-  
-  videoEl.addEventListener('ended', () => {
-    isPlaying = false;
-    playPauseBtn.innerHTML = '<i class="fas fa-play">';
-  });
-  
-  playPauseBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    togglePlayPause();
-  });
-  
-  videoEl.addEventListener('click', (e) => {
-    e.stopPropagation();
-    togglePlayPause();
-  });
-  
-  progressBarTrack.addEventListener('click', (e) => {
-    e.stopPropagation();
-    if (videoEl.duration) {
-      videoEl.currentTime = (e.offsetX / progressBarTrack.offsetWidth) * videoEl.duration;
-    }
-  });
-  
-  muteBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    videoEl.muted = !videoEl.muted;
-    muteBtn.innerHTML = videoEl.muted ? '<i class="fas fa-volume-mute">' : '<i class="fas fa-volume-up">';
-    volumeSlider.value = videoEl.muted ? 0 : videoEl.volume;
-  });
-  
-  volumeSlider.addEventListener('input', (e) => {
-    videoEl.volume = parseFloat(e.target.value);
-    videoEl.muted = e.target.value == 0;
-    muteBtn.innerHTML = e.target.value == 0 ? '<i class="fas fa-volume-mute">' : '<i class="fas fa-volume-up">';
-  });
-  
-  fullscreenBtn.addEventListener('click', () => {
-    const wrapper = document.querySelector('.fullsize-video-wrapper');
-    if (document.fullscreenElement) {
-      document.exitFullscreen();
-    } else {
-      wrapper.requestFullscreen();
-    }
-  });
-  
-  // Handle video load errors
-  videoEl.addEventListener('error', () => {
-    domElements.previewMediaContainer.innerHTML = `
-      <div class="broken-placeholder" style="min-height:300px;display:flex;flex-direction:column;align-items:center;">
-        <i class="fas fa-unlink" style="font-size:3rem;margin-bottom:1rem;opacity:0.4;color:#DC2626"></i>
-        <p style="font-size:1.125rem;font-weight:600;color:#DC2626">Video unavailable</p>
-        <small style="color:#767676">This file may have been removed from server</small>
-      </div>`;
-  });
 }
 
-domElements.closePreviewBtn.addEventListener('click', closePreviewModal);
-domElements.previewModal.addEventListener('click', (event) => {
-  if (event.target === domElements.previewModal) closePreviewModal();
-});
-
-domElements.downloadPreviewBtn.addEventListener('click', () => {
-  if (!appState.currentPreviewData?.url) return;
+// ============================================================
+// TOAST SYSTEM
+// ============================================================
+var Toast = {
+  timer: null,
   
-  const downloadLink = document.createElement('a');
-  downloadLink.href = appState.currentPreviewData.url;
-  downloadLink.download = appState.currentPreviewData.url.split('/').pop() || 'download';
-  downloadLink.target = '_blank';
-  document.body.appendChild(downloadLink);
-  downloadLink.click();
-  document.body.removeChild(downloadLink);
-  ToastNotification.showMessage('Download started...');
-});
-
-domElements.savePreviewBtn.addEventListener('click', () => {
-  ToastNotification.showMessage('Saved to your board!');
-});
-
-// ==================== VIDEO PLAYER FOR PIN CARDS ====================
-function setupCardVideoPlayer(cardElementId) {
-  const cardElement = document.getElementById(cardElementId);
-  if (!cardElement) return;
-  
-  const videoElement = cardElement.querySelector('video');
-  const overlayButton = cardElement.querySelector('.play-button-overlay');
-  const playIcon = cardElement.querySelector('.play-icon');
-  const progressBarFill = cardElement.querySelector('.progress-bar-fill');
-  const progressBarTrack = cardElement.querySelector('.progress-bar-container');
-  const volumeSlider = cardElement.querySelector('.volume-slider');
-  const volumeIcon = cardElement.querySelector('.volume-icon');
-  const timeDisplayElement = cardElement.querySelector('.time-display');
-  
-  if (!videoElement) return;
-  
-  let isVideoPlaying = false;
-  
-  const toggleVideoPlayback = (event) => {
-    event?.stopPropagation();
-    if (isVideoPlaying) {
-      videoElement.pause();
-      if (playIcon) playIcon.className = 'fas fa-play play-icon';
-      if (overlayButton) overlayButton.style.display = 'flex';
-    } else {
-      videoElement.play();
-      if (playIcon) playIcon.className = 'fas fa-pause play-icon';
-      if (overlayButton) overlayButton.style.display = 'none';
-    }
-    isVideoPlaying = !isVideoPlaying;
-  };
-  
-  if (overlayButton) overlayButton.addEventListener('click', toggleVideoPlayback);
-  videoElement.addEventListener('click', toggleVideoPlayback);
-  
-  videoElement.addEventListener('timeupdate', () => {
-    if (videoElement.duration && progressBarFill) {
-      progressBarFill.style.width = `${(videoElement.currentTime / videoElement.duration) * 100}%`;
-    }
-    if (timeDisplayElement && videoElement.duration) {
-      timeDisplayElement.textContent = `${UtilityHelpers.formatVideoDuration(videoElement.currentTime)} / ${UtilityHelpers.formatVideoDuration(videoElement.duration)}`;
-    }
-  });
-  
-  videoElement.addEventListener('ended', () => {
-    isVideoPlaying = false;
-    if (playIcon) playIcon.className = 'fas fa-play play-icon';
-    if (overlayButton) overlayButton.style.display = 'flex';
-  });
-  
-  if (progressBarTrack) {
-    progressBarTrack.addEventListener('click', (event) => {
-      event.stopPropagation();
-      if (videoElement.duration) {
-        videoElement.currentTime = (event.offsetX / progressBarTrack.offsetWidth) * videoElement.duration;
-      }
-    });
-  }
-  
-  if (volumeSlider) {
-    volumeSlider.addEventListener('input', (event) => {
-      event.stopPropagation();
-      videoElement.volume = parseFloat(event.target.value);
-      videoElement.muted = event.target.value == 0;
-      if (volumeIcon) {
-        volumeIcon.className = (parseFloat(event.target.value) == 0 ? 'fas fa-volume-mute' : 'fas fa-volume-up') + ' volume-icon';
-      }
-    });
-  }
-  
-  if (volumeIcon) {
-    volumeIcon.addEventListener('click', (event) => {
-      event.stopPropagation();
-      videoElement.muted = !videoElement.muted;
-      volumeIcon.className = (videoElement.muted ? 'fas fa-volume-mute' : 'fas fa-volume-up') + ' volume-icon';
-      if (volumeSlider) volumeSlider.value = videoElement.muted ? 0 : videoElement.volume;
-    });
-  }
-  
-  // Handle video errors - mark as broken
-  videoElement.addEventListener('error', () => {
-    markCardAsBroken(cardElement, videoElement.src || '');
-  });
-}
-
-// ==================== BROKEN FILE DETECTION & HANDLING ====================
-function markCardAsBroken(cardElement, failedUrl) {
-  if (!cardElement) return;
-  
-  cardElement.classList.add('broken-state');
-  
-  const pinIdentifier = SecurityUtils.extractPinIdFromUrl(failedUrl);
-  if (pinIdentifier) {
-    appState.brokenPinsSet.add(pinIdentifier);
-    persistBrokenPins();
-  }
-  
-  const mediaWrapper = cardElement.querySelector('.pin-media-wrapper');
-  if (mediaWrapper) {
-    mediaWrapper.innerHTML = `
-      <div class="broken-placeholder">
-        <i class="fas fa-unlink"></i>
-        <p>File Not Found</p>
-        <small>This file may have been deleted or moved</small>
-      </div>
-      <button class="remove-broken-action" onclick="removeBrokenPinCard(this)" title="Remove this pin">
-        <i class="fas fa-times"></i>
-      </button>`;
-  }
-  
-  console.warn(`⚠️ Broken file detected:`, failedUrl);
-}
-
-window.removeBrokenPinCard = function(buttonElement) {
-  const cardToRemove = buttonElement.closest('.pin-card');
-  if (cardToRemove) {
-    cardToRemove.style.transition = 'all 0.3s ease';
-    cardToRemove.style.opacity = '0';
-    cardToRemove.style.transform = 'scale(0.9)';
-    
-    setTimeout(() => {
-      cardToRemove.remove();
-      ToastNotification.showMessage('Broken pin removed');
-    }, 300);
+  show: function(message, type) {
+    type = type || '';
+    if (this.timer) clearTimeout(this.timer);
+    var el = DOM.toastNotification;
+    el.textContent = message;
+    el.className = 'toast-notification is-visible' + (type ? ' toast-' + type : '');
+    var self = this;
+    this.timer = setTimeout(function() { el.classList.remove('is-visible'); }, CONFIG.TOAST_DURATION);
   }
 };
 
-function checkIfKnownBroken(urlToCheck) {
-  const pinId = SecurityUtils.extractPinIdFromUrl(urlToCheck);
-  return pinId ? appState.brokenPinsSet.has(pinId) : false;
-}
-
-function clearBrokenPinsCache() {
-  appState.brokenPinsSet.clear();
-  localStorage.removeItem(APP_CONFIG.BROKEN_PINS_STORAGE_KEY);
-  ToastNotification.showMessage('Broken files cache cleared');
-}
-
-window.clearBrokenPinsCache = clearBrokenPinsCache;
-
-// ==================== DATA FETCHING WITH INFINITE SCROLL FIX ====================
-async function fetchPinsData(resetList = false) {
-  // Prevent multiple simultaneous requests
-  if (appState.isLoadingData) return;
-  
-  // Prevent loading when no more pages available
-  if (!resetList && !appState.hasMorePages) {
-    showEndOfContentMessage();
-    return;
-  }
-  
-  if (resetList) {
-    domElements.pinsGrid.innerHTML = '';
-    appState.currentPage = 1;
-    appState.hasMorePages = true;
-    domElements.skeletonLoader.style.display = 'block';
-    domElements.loadingIndicator.style.display = 'none';
-    hideEndOfContentMessage();
-  } else {
-    domElements.loadingIndicator.style.display = 'flex';
-  }
-  
-  appState.isLoadingData = true;
-  
-  try {
-    const response = await fetch(`${APP_CONFIG.API_ENDPOINT}/post/all?page=${appState.currentPage}`, {
-      headers: { 'Authorization': appState.authToken }
+// ============================================================
+// COMING SOON HANDLER
+// ============================================================
+var ComingSoon = {
+  init: function() {
+    var self = this;
+    // Attach click handlers to ALL elements with btn-coming-soon class
+    document.querySelectorAll('.btn-coming-soon').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        self.show(this.getAttribute('data-feature'));
+      });
     });
     
-    if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+    DOM.closeComingSoonBtn.addEventListener('click', function() { self.hide(); });
+    DOM.comingSoonModal.addEventListener('click', function(e) {
+      if (e.target === DOM.comingSoonModal) self.hide();
+    });
+  },
+  
+  show: function(featureName) {
+    DOM.comingSoonFeatureName.textContent = featureName + ' - Coming Soon! ';
+    DOM.comingSoonModal.classList.add('is-visible');
+  },
+  
+  hide: function() {
+    DOM.comingSoonModal.classList.remove('is-visible');
+  }
+};
+
+// ============================================================
+// USER MENU & AUTH
+// ============================================================
+var UserManager = {
+  init: function() {
+    this.updateUserInfo();
+    this.bindEvents();
+  },
+  
+  updateUserInfo: function() {
+    // Update avatar with REAL username from Mongoose User model
+    if (State.currentUser && State.currentUser.username) {
+      var initials = Utils.getInitials(State.currentUser.username);
+      DOM.userAvatarBtn.textContent = initials;
+      DOM.currentUserAvatar.textContent = initials;
+      
+      // Update placeholder text with REAL name
+      var firstName = State.currentUser.username.split(' ')[0];
+      DOM.triggerCreatePost.placeholder = "What's on your mind, " + firstName + "?";
+    }
+  },
+  
+  bindEvents: function() {
+    var self = this;
     
-    const pinsArray = await response.json();
+    DOM.userAvatarBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      DOM.userDropdownMenu.classList.toggle('active');
+    });
     
-    // Check if we've reached the end
-    if (!pinsArray || pinsArray.length === 0) {
-      appState.hasMorePages = false;
-      if (resetList) {
-        showEmptyStateMessage();
-      } else {
-        showEndOfContentMessage();
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('#userMenuWrapper')) {
+        DOM.userDropdownMenu.classList.remove('active');
       }
-      domElements.skeletonLoader.style.display = 'none';
-      domElements.loadingIndicator.style.display = 'none';
-      appState.isLoadingData = false;
+    });
+    
+    DOM.btnLogout.addEventListener('click', function() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('currentUser');
+      Toast.show('Logged out successfully!', 'success');
+      setTimeout(function() { window.location.reload(); }, 1000);
+    });
+  }
+};
+
+// ============================================================
+// UPLOAD MODAL
+// ============================================================
+var UploadModal = {
+  init: function() { this.bindEvents(); },
+  
+  bindEvents: function() {
+    var self = this;
+    
+    DOM.btnCreatePost.addEventListener('click', function() { self.open(); });
+    DOM.triggerCreatePost.addEventListener('click', function() { self.open(); });
+    DOM.btnPhotoVideoUpload.addEventListener('click', function() { self.open(); });
+    
+    DOM.closeModalBtn.addEventListener('click', function() { self.close(); });
+    DOM.cancelBtn.addEventListener('click', function() { self.close(); });
+    DOM.uploadModal.addEventListener('click', function(e) {
+      if (e.target === DOM.uploadModal) self.close();
+    });
+    
+    DOM.dropzoneArea.addEventListener('click', function() { DOM.fileInputElement.click(); });
+    DOM.changeFileBtn.addEventListener('click', function() { DOM.fileInputElement.click(); });
+    DOM.fileInputElement.addEventListener('change', function(e) { self.handleFileSelect(e.target); });
+    
+    // Drag & Drop
+    DOM.dropzoneArea.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      DOM.dropzoneArea.style.borderColor = '#1877F2';
+      DOM.dropzoneArea.style.background = '#E7F3FF';
+    });
+    
+    DOM.dropzoneArea.addEventListener('dragleave', function(e) {
+      e.preventDefault();
+      if (!DOM.dropzoneArea.classList.contains('has-file-selected')) {
+        DOM.dropzoneArea.style.borderColor = '';
+        DOM.dropzoneArea.style.background = '';
+      }
+    });
+    
+    DOM.dropzoneArea.addEventListener('drop', function(e) {
+      e.preventDefault();
+      DOM.dropzoneArea.style.borderColor = '';
+      DOM.dropzoneArea.style.background = '';
+      var file = e.dataTransfer.files[0];
+      if (file) {
+        DOM.fileInputElement.files = e.dataTransfer.files;
+        self.handleFileSelect(DOM.fileInputElement);
+      }
+    });
+    
+    DOM.uploadFormElement.addEventListener('submit', function(e) { self.handleSubmit(e); });
+  },
+  
+  open: function() {
+    DOM.uploadModal.classList.add('is-visible');
+    document.body.style.overflow = 'hidden';
+    DOM.userDropdownMenu.classList.remove('active');
+    ScrollManager.disable();
+  },
+  
+  close: function() {
+    if (State.isUploading) {
+      Toast.show('Please wait for upload to complete...', 'error');
+      return;
+    }
+    if (State.autoCloseTimer) {
+      clearTimeout(State.autoCloseTimer);
+      State.autoCloseTimer = null;
+    }
+    this.resetForm();
+    DOM.uploadModal.classList.remove('is-visible');
+    document.body.style.overflow = '';
+    ScrollManager.enable();
+  },
+  
+  resetForm: function() {
+    DOM.uploadFormElement.reset();
+    DOM.fileInputElement.value = '';
+    State.selectedFile = null;
+    State.isUploading = false;
+    
+    DOM.dropzoneArea.className = 'dropzone-area';
+    DOM.dropzoneArea.style.cssText = '';
+    DOM.uploadIconDisplay.className = 'fas fa-cloud-upload-alt upload-cloud-icon';
+    DOM.uploadIconDisplay.style.color = '';
+    DOM.uploadTextMain.textContent = 'Drag photos or videos here';
+    DOM.uploadTextMain.style.cssText = '';
+    DOM.uploadTextSub.textContent = 'or click to browse files';
+    
+    DOM.previewSectionArea.classList.remove('is-displayed');
+    DOM.previewMediaBox.innerHTML = '';
+    
+    DOM.progressSectionArea.classList.remove('is-displayed', 'success-mode', 'error-mode');
+    DOM.progressSectionArea.style.display = '';
+    
+    DOM.submitBtn.disabled = true;
+    DOM.submitBtn.classList.remove('btn-modal-loading');
+    DOM.submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Post';
+    DOM.cancelBtn.disabled = false;
+    DOM.cancelBtn.textContent = 'Cancel';
+    DOM.closeModalBtn.disabled = false;
+    DOM.captionInput.disabled = false;
+    DOM.postTitleInput.disabled = false;
+    DOM.changeFileBtn.disabled = false;
+  },
+  
+  handleFileSelect: function(input) {
+    var file = input.files[0];
+    if (!file) return;
+    
+    if (file.size > CONFIG.MAX_FILE_SIZE) {
+      Toast.show('File too large! Maximum is ' + (CONFIG.MAX_FILE_SIZE / 1024 / 1024) + 'MB', 'error');
+      input.value = '';
       return;
     }
     
-    // Filter out invalid and known-broken pins
-    const validPinsArray = pinsArray.filter(pinItem => {
-      const itemUrl = pinItem.fileUrl;
+    if (CONFIG.ACCEPTED_TYPES.indexOf(file.type) === -1) {
+      Toast.show('Invalid file type!', 'error');
+      input.value = '';
+      return;
+    }
+    
+    State.selectedFile = file;
+    
+    DOM.dropzoneArea.classList.add('has-file-selected');
+    DOM.uploadIconDisplay.className = 'fas fa-check-circle upload-cloud-icon';
+    DOM.uploadIconDisplay.style.color = '#31A24C';
+    DOM.uploadTextMain.textContent = '✅ File selected!';
+    DOM.uploadTextMain.style.fontWeight = '700';
+    DOM.uploadTextMain.style.color = '#31A24C';
+    DOM.uploadTextSub.textContent = 'Click "Change" to select different file';
+    
+    DOM.fileNameText.textContent = Utils.escapeHtml(file.name);
+    DOM.fileSizeText.textContent = Utils.formatFileSize(file.size);
+    
+    var self = this;
+    
+    if (file.type.startsWith('video/')) {
+      DOM.fileTypeBadge.innerHTML = '<i class="fas fa-video"></i>';
+      var url = URL.createObjectURL(file);
+      DOM.previewMediaBox.innerHTML = '<video src="' + url + '" class="preview-video-tag" preload="metadata"></video><button type="button" class="delete-file-button" title="Remove"><i class="fas fa-times"></i></button>';
       
-      // Skip invalid URLs
-      if (!itemUrl || !SecurityUtils.isValidUrlFormat(itemUrl)) {
-        console.warn('Skipping invalid URL:', itemUrl);
-        return false;
-      }
+      var vid = document.createElement('video');
+      vid.preload = 'metadata';
+      vid.onloadedmetadata = function() {
+        DOM.fileSizeText.textContent = Utils.formatFileSize(file.size) + ' • ' + Utils.formatDuration(vid.duration);
+        URL.revokeObjectURL(vid.src);
+      };
+      vid.src = url;
+    } else {
+      DOM.fileTypeBadge.innerHTML = '<i class="fas fa-image"></i>';
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        DOM.previewMediaBox.innerHTML = '<img src="' + e.target.result + '" alt="' + Utils.escapeHtml(file.name) + '" class="preview-image-tag"/><button type="button" class="delete-file-button" title="Remove"><i class="fas fa-times"></i></button>';
+        
+        var img = new Image();
+        img.onload = function() {
+          DOM.fileSizeText.textContent = Utils.formatFileSize(file.size) + ' • ' + img.width + '×' + img.height;
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+    
+    DOM.previewSectionArea.classList.add('is-displayed');
+    DOM.submitBtn.disabled = false;
+    
+    var removeBtn = DOM.previewMediaBox.querySelector('.delete-file-button');
+    if (removeBtn) removeBtn.addEventListener('click', function() { self.clearFile(); });
+  },
+  
+  clearFile: function() {
+    DOM.fileInputElement.value = '';
+    State.selectedFile = null;
+    
+    DOM.dropzoneArea.className = 'dropzone-area';
+    DOM.dropzoneArea.style.cssText = '';
+    DOM.uploadIconDisplay.className = 'fas fa-cloud-upload-alt upload-cloud-icon';
+    DOM.uploadIconDisplay.style.color = '';
+    DOM.uploadTextMain.textContent = 'Drag photos or videos here';
+    DOM.uploadTextMain.style.cssText = '';
+    DOM.uploadTextSub.textContent = 'or click to browse files';
+    
+    DOM.previewSectionArea.classList.remove('is-displayed');
+    DOM.previewMediaBox.innerHTML = '';
+    DOM.submitBtn.disabled = true;
+  },
+  
+  initProgress: function() {
+    DOM.progressSectionArea.classList.remove('success-mode', 'error-mode');
+    DOM.progressSectionArea.classList.add('is-displayed');
+    DOM.progressSectionArea.style.display = 'block';
+    
+    DOM.spinnerMiniIcon.className = 'spinner-mini-icon';
+    DOM.spinnerMiniIcon.innerHTML = '';
+    DOM.statusTextLabel.textContent = 'Preparing...';
+    DOM.percentageTextValue.textContent = '0%';
+    DOM.innerProgressFill.style.width = '0%';
+    DOM.speedInfoText.innerHTML = '<i class="fas fa-arrow-up"></i> Initializing...';
+    DOM.timeInfoText.innerHTML = '<i class="fas fa-clock"></i> Please wait...';
+  },
+  
+  updateProgress: function(percent, speed, eta) {
+    DOM.percentageTextValue.textContent = Math.round(percent) + '%';
+    DOM.innerProgressFill.style.width = percent + '%';
+    
+    if (percent >= 99) DOM.statusTextLabel.textContent = 'Processing...';
+    else if (percent >= 75) DOM.statusTextLabel.textContent = 'Almost done...';
+    else DOM.statusTextLabel.textContent = 'Uploading...';
+    
+    if (speed) DOM.speedInfoText.innerHTML = '<i class="fas fa-arrow-up"></i> ' + speed + '/s';
+    if (eta && percent > 0 && percent < 100) DOM.timeInfoText.innerHTML = '<i class="fas fa-clock"></i> ' + eta + ' remaining';
+    else if (percent >= 99) DOM.timeInfoText.innerHTML = '<i class="fas fa-clock"></i> Finalizing...';
+  },
+  
+  showSuccess: function() {
+    DOM.progressSectionArea.classList.add('success-mode');
+    DOM.spinnerMiniIcon.className = 'spinner-mini-icon completed-state';
+    DOM.spinnerMiniIcon.innerHTML = '<i class="fas fa-check"></i>';
+    DOM.statusTextLabel.textContent = 'Complete!';
+    DOM.percentageTextValue.textContent = '100%';
+    DOM.innerProgressFill.style.width = '100%';
+    DOM.speedInfoText.innerHTML = '<i class="fas fa-check-circle"></i> <span style="color:#31A24C;font-weight:600;">Success!</span>';
+    DOM.timeInfoText.innerHTML = '<i class="fas fa-clock"></i> Done ✓';
+  },
+  
+  showError: function(message) {
+    DOM.progressSectionArea.classList.add('error-mode');
+    DOM.spinnerMiniIcon.style.background = '#FA383E';
+    DOM.spinnerMiniIcon.innerHTML = '<i class="fas fa-exclamation"></i>';
+    DOM.statusTextLabel.textContent = message || 'Upload failed';
+    DOM.speedInfoText.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Error occurred';
+    DOM.timeInfoText.innerHTML = '<i class="fas fa-redo"></i> Try again';
+  },
+  
+  lockUI: function(isLocked) {
+    State.isUploading = isLocked;
+    DOM.dropzoneArea.classList.toggle('is-uploading-state', isLocked);
+    DOM.submitBtn.disabled = isLocked;
+    DOM.submitBtn.classList.toggle('btn-modal-loading', isLocked);
+    DOM.cancelBtn.disabled = isLocked;
+    DOM.cancelBtn.textContent = isLocked ? 'Posting...' : 'Cancel';
+    DOM.closeModalBtn.disabled = isLocked;
+    DOM.captionInput.disabled = isLocked;
+    DOM.postTitleInput.disabled = isLocked;
+    DOM.changeFileBtn.disabled = isLocked;
+    
+    if (isLocked) this.initProgress();
+  },
+  
+  handleSubmit: async function(event) {
+    event.preventDefault();
+    
+    if (!State.selectedFile) {
+      Toast.show('Please select a file first!', 'error');
+      return;
+    }
+    
+    this.lockUI(true);
+    
+    var formData = new FormData();
+    formData.append('file', State.selectedFile);
+    formData.append('title', Utils.escapeHtml(DOM.postTitleInput.value.trim()));
+    formData.append('caption', Utils.escapeHtml(DOM.captionInput.value.trim()));
+    formData.append('userId', State.currentUser ? State.currentUser._id : '');
+    formData.append('username', State.currentUser ? State.currentUser.username : ''); // Send REAL username
+    
+    var self = this;
+    
+    try {
+      var xhr = new XMLHttpRequest();
+      var startTime = Date.now();
       
-      // Skip known broken pins
-      if (checkIfKnownBroken(itemUrl)) {
-        console.warn('Skipping known broken pin:', itemUrl);
-        return false;
-      }
+      xhr.upload.onprogress = function(evt) {
+        if (evt.lengthComputable) {
+          var pct = (evt.loaded / evt.total) * 100;
+          var elapsed = (Date.now() - startTime) / 1000;
+          var spd = Utils.formatFileSize(evt.loaded / Math.max(elapsed, 0.001));
+          self.updateProgress(pct, spd, '');
+        }
+      };
       
-      return true;
+      await new Promise(function(resolve, reject) {
+        xhr.onload = resolve;
+        xhr.onerror = reject;
+        xhr.open('POST', CONFIG.API_ENDPOINT + '/post/upload');
+        xhr.setRequestHeader('Authorization', State.token);
+        xhr.send(formData);
+      });
+      
+      self.updateProgress(99, null, null);
+      await new Promise(function(r) { setTimeout(r, CONFIG.SUCCESS_DISPLAY_DELAY); });
+      self.showSuccess();
+      
+      State.autoCloseTimer = setTimeout(function() {
+        self.close();
+        FeedManager.fetchPosts(true);
+        Toast.show('🎉 Post created successfully!', 'success');
+      }, CONFIG.AUTO_CLOSE_DELAY);
+      
+    } catch(err) {
+      console.error('Upload error:', err);
+      self.showError(err.message || 'Network error occurred');
+      self.lockUI(false);
+      Toast.show('Upload failed. Please try again.', 'error');
+    }
+  }
+};
+
+// ============================================================
+// EDIT POST MODAL (FIXED & FULLY FUNCTIONAL)
+// ============================================================
+var EditPostModal = {
+  currentPostData: null,
+  
+  init: function() { this.bindEvents(); },
+  
+  bindEvents: function() {
+    var self = this;
+    
+    DOM.closeEditModalBtn.addEventListener('click', function() { self.close(); });
+    DOM.cancelEditBtn.addEventListener('click', function() { self.close(); });
+    DOM.editPostModal.addEventListener('click', function(e) {
+      if (e.target === DOM.editPostModal) self.close();
     });
     
-    domElements.skeletonLoader.style.display = 'none';
-    domElements.loadingIndicator.style.display = 'none';
+    DOM.editPostFormElement.addEventListener('submit', function(e) {
+      e.preventDefault();
+      self.handleSubmit();
+    });
+  },
+  
+  open: function(postData) {
+    this.currentPostData = postData;
     
-    // Create document fragment for batch DOM insertion
-    const fragment = document.createDocumentFragment();
+    // Populate form with current data
+    DOM.editPostId.value = postData._id || postData.id || '';
+    DOM.editTitleInput.value = postData.title || '';
+    DOM.editCaptionInput.value = postData.caption || '';
     
-    validPinsArray.forEach((pinData, index) => {
-      const uniqueCardId = `pin-${Date.now()}-${index}`;
-      const randomHeight = UtilityHelpers.generateRandomHeight();
-      const sanitizedUrl = SecurityUtils.sanitizeUrl(pinData.fileUrl);
-      const sanitizedTitle = SecurityUtils.escapeHtmlString(pinData.title || '');
+    DOM.editPostModal.classList.add('is-visible');
+    document.body.style.overflow = 'hidden';
+    ScrollManager.disable();
+  },
+  
+  close: function() {
+    DOM.editPostModal.classList.remove('is-visible');
+    document.body.style.overflow = '';
+    this.currentPostData = null;
+    ScrollManager.enable();
+  },
+  
+  handleSubmit: async function() {
+    if (!this.currentPostData) return;
+    
+    var postId = DOM.editPostId.value;
+    var newTitle = Utils.escapeHtml(DOM.editTitleInput.value.trim());
+    var newCaption = Utils.escapeHtml(DOM.editCaptionInput.value.trim());
+    
+    if (!newTitle && !newCaption) {
+      Toast.show('Please enter a title or caption!', 'error');
+      return;
+    }
+    
+    try {
+      var response = await fetch(CONFIG.API_ENDPOINT + '/post/' + postId, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': State.token
+        },
+        body: JSON.stringify({
+          title: newTitle,
+          caption: newCaption
+        })
+      });
       
-      const cardElement = document.createElement('div');
-      cardElement.className = 'pin-card';
-      cardElement.id = uniqueCardId;
+      if (!response.ok) throw new Error('Update failed');
       
-      let mediaContentHTML = '';
+      this.close();
+      FeedManager.fetchPosts(true); // Refresh feed
+      Toast.show('✏️ Post updated successfully!', 'success');
       
-      if (pinData.type === 'image' && sanitizedUrl) {
-        mediaContentHTML = `<img src="${sanitizedUrl}" alt="${sanitizedTitle}" class="pin-image" style="height:${randomHeight}" loading="lazy" onerror="markCardAsBroken(this.closest('.pin-card'), '${sanitizedUrl}')"/>`;
-      } else if (sanitizedUrl) {
-        mediaContentHTML = `
-          <div class="video-container" style="height:${randomHeight}">
-            <video src="${sanitizedUrl}" preload="metadata" muted></video>
-            <div class="play-button-overlay"><i class="fas fa-play"></i></div>
-            <div class="video-overlay-controls">
-              <div class="progress-bar-container"><div class="progress-bar-fill"></div></div>
-              <div class="video-control-buttons">
-                <div class="control-group-left">
-                  <button class="video-control-btn"><i class="fas fa-play play-icon"></i></button>
-                  <button class="video-control-btn"><i class="fas fa-volume-mute volume-icon"></i></button>
-                  <input type="range" class="volume-slider" value="0" min="0" max="1" step="0.1"/>
-                  <span class="time-display">0:00 / 0:00</span>
-                </div>
-                <div class="control-group-right">
-                  <button class="video-control-btn"><i class="fas fa-expand"></i></button>
-                </div>
-              </div>
-            </div>
-          </div>`;
-      }
-      
-      cardElement.innerHTML = `
-        <div class="pin-media-wrapper" onclick="if(!this.closest('.pin-card').classList.contains('broken-state')){openPreviewModal('${sanitizedUrl}','${pinData.type}','${sanitizedTitle.replace(/'/g, "\\'")}')"}">
-          ${mediaContentHTML}
-        </div>
-        ${sanitizedTitle ? `<div class="pin-info-section"><p class="pin-title-text">${sanitizedTitle}</p></div>` : ''}`;
-      
-      fragment.appendChild(cardElement);
-      
-      // Initialize video player for non-image cards
-      if (pinData.type !== 'image' && sanitizedUrl) {
-        requestAnimationFrame(() => setupCardVideoPlayer(uniqueCardId));
+    } catch(err) {
+      console.error('Edit error:', err);
+      Toast.show('Failed to update post.', 'error');
+    }
+  }
+};
+
+// ============================================================
+// VIDEO PLAYER (Simplified)
+// ============================================================
+var VideoPlayer = {
+  setup: function(cardId) {
+    var card = document.getElementById(cardId);
+    if (!card) return;
+    
+    var player = card.querySelector('.video-player-simple');
+    var video = card.querySelector('.video-element-main');
+    var playOverlay = card.querySelector('.play-button-center');
+    var playIcon = card.querySelector('.play-icon-class');
+    var progressFill = card.querySelector('.progress-bar-fill');
+    var progressTrack = card.querySelector('.progress-bar-track');
+    var bufferedBar = card.querySelector('.buffered-indicator');
+    var volumeSlider = card.querySelector('.volume-slider-input');
+    var muteBtn = card.querySelector('.mute-btn-class');
+    var timeDisplay = card.querySelector('.time-text-display');
+    
+    if (!video || !player) return;
+    
+    var playing = false;
+    var controlsTimeout = null;
+    
+    var togglePlay = function(e) {
+      e && e.stopPropagation();
+      playing = !playing;
+      if (playIcon) playIcon.className = playing ? 'fas fa-pause' : 'fas fa-play';
+      if (playOverlay) playOverlay.classList.toggle('hidden-state', playing);
+      playing ? video.play() : video.pause();
+      showControls();
+    };
+    
+    var showControls = function() {
+      player.classList.add('show-controls');
+      clearTimeout(controlsTimeout);
+      if (playing) controlsTimeout = setTimeout(function() { player.classList.remove('show-controls'); }, 2800);
+    };
+    
+    if (playOverlay) playOverlay.addEventListener('click', togglePlay);
+    video.addEventListener('click', togglePlay);
+    
+    video.addEventListener('timeupdate', function() {
+      if (video.duration && progressFill) progressFill.style.width = ((video.currentTime / video.duration) * 100) + '%';
+      if (timeDisplay && video.duration) timeDisplay.textContent = Utils.formatDuration(video.currentTime) + ' / ' + Utils.formatDuration(video.duration);
+    });
+    
+    video.addEventListener('progress', function() {
+      if (video.buffered.length > 0 && video.duration && bufferedBar)
+        bufferedBar.style.width = ((video.buffered.end(video.buffered.length - 1) / video.duration) * 100) + '%';
+    });
+    
+    video.addEventListener('ended', function() {
+      playing = false;
+      if (playIcon) playIcon.className = 'fas fa-play';
+      if (playOverlay) playOverlay.classList.remove('hidden-state');
+    });
+    
+    if (progressTrack) progressTrack.addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (video.duration) video.currentTime = (e.offsetX / progressTrack.offsetWidth) * video.duration;
+    });
+    
+    if (volumeSlider) volumeSlider.addEventListener('input', function(e) {
+      e.stopPropagation();
+      video.volume = parseFloat(e.target.value);
+      video.muted = (e.target.value == 0);
+      if (muteBtn) muteBtn.innerHTML = (parseFloat(e.target.value) == 0) ? '<i class="fas fa-volume-mute">' : '<i class="fas fa-volume-up">';
+    });
+    
+    if (muteBtn) muteBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      video.muted = !video.muted;
+      muteBtn.innerHTML = video.muted ? '<i class="fas fa-volume-mute">' : '<i class="fas fa-volume-up">';
+      if (volumeSlider) volumeSlider.value = video.muted ? 0 : video.volume;
+    });
+    
+    player.addEventListener('mousemove', showControls);
+    player.addEventListener('mouseenter', showControls);
+    player.addEventListener('mouseleave', function() { if (playing) player.classList.remove('show-controls'); });
+    
+    video.setAttribute('tabindex', '0');
+    video.addEventListener('keydown', function(e) {
+      switch(e.key) {
+        case ' ': case 'k': e.preventDefault(); togglePlay(); break;
+        case 'm': e.preventDefault(); muteBtn && muteBtn.click(); break;
+        case 'ArrowLeft': e.preventDefault(); video.currentTime -= 5; break;
+        case 'ArrowRight': e.preventDefault(); video.currentTime += 5; break;
+        case 'ArrowUp': e.preventDefault(); video.volume = Math.min(1, video.volume + 0.1); if (volumeSlider) volumeSlider.value = video.volume; break;
+        case 'ArrowDown': e.preventDefault(); video.volume = Math.max(0, video.volume - 0.1); if (volumeSlider) volumeSlider.value = video.volume; break;
       }
     });
     
-    // Batch insert into DOM
-    domElements.pinsGrid.appendChild(fragment);
-    appState.currentPage++;
+    video.addEventListener('error', function() { this.markBroken(card, video.src); }.bind(this));
+  },
+  
+  markBroken: function(card, url) {
+    if (!card) return;
+    var mediaArea = card.querySelector('.media-box');
+    if (mediaArea) mediaArea.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem;background:#FFF3F3;border-radius:10px;color:#FA383E;text-align:center;"><i class="fas fa-exclamation-triangle" style="font-size:2.5rem;margin-bottom:12px;opacity:0.6;"></i><p style="font-weight:600;font-size:15px;">Media unavailable</p><small style="margin-top:4px;">This file may have been removed</small></div>';
+  }
+};
+
+// ============================================================
+// PREVIEW MODAL
+// ============================================================
+var PreviewModal = {
+  init: function() {
+    var self = this;
+    DOM.closePreviewBtn.addEventListener('click', function() { self.close(); });
+    DOM.previewModal.addEventListener('click', function(e) { if (e.target === DOM.previewModal) self.close(); });
+    DOM.downloadBtn.addEventListener('click', function() { self.download(); });
+  },
+  
+  open: function(url, type, title) {
+    State.previewData = { url: url, type: type, title: title };
     
-    // Log filtering statistics
-    if (pinsArray.length !== validPinsArray.length) {
-      console.log(`📊 Filtered ${pinsArray.length - validPinsArray.length} invalid/broken pins from ${pinsArray.length} total`);
+    if (type === 'video') {
+      DOM.previewMediaDisplayBox.innerHTML = '<div class="fullscreen-video-container"><video id="fsVideoPlayer" src="' + url + '" muted playsinline></video><div class="fullscreen-video-controls"><div class="progress-bar-track" id="fsProgressBarTrack"><div class="buffered-indicator" id="fsBufferedBar"></div><div class="progress-bar-fill" id="fsProgressBarFill"></div></div><div class="controls-row-flex"><div class="controls-group-left"><button class="ctrl-btn" id="fsPlayPauseBtn"><i class="fas fa-play"></i></button><button class="ctrl-btn" id="fsMuteBtn"><i class="fas fa-volume-mute"></i></button><input type="range" class="volume-slider-input" id="fsVolumeSlider" value="0" min="0" max="1" step="0.1"/><span class="time-text-display" id="fsTimeDisplay">0:00 / 0:00</span></div></div></div></div>';
+      this.initFsPlayer();
+    } else {
+      DOM.previewMediaDisplayBox.innerHTML = '<img src="' + url + '" alt="' + Utils.escapeHtml(title) + '" class="fullsize-image-preview"/>';
     }
     
-    // Check if we should expect more pages based on returned data size
-    if (validPinsArray.length < 10) {
-      appState.hasMorePages = false;
+    DOM.previewModal.classList.add('is-visible');
+    document.body.style.overflow = 'hidden';
+    ScrollManager.disable();
+  },
+  
+  close: function() {
+    DOM.previewModal.classList.remove('is-visible');
+    document.body.style.overflow = '';
+    var video = document.getElementById('fsVideoPlayer');
+    if (video) video.pause();
+    State.previewData = null;
+    ScrollManager.enable();
+  },
+  
+  download: function() {
+    if (!State.previewData || !State.previewData.url) return;
+    var a = document.createElement('a');
+    a.href = State.previewData.url;
+    a.download = State.previewData.url.split('/').pop() || 'download';
+    a.target = '_blank';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    Toast.show('Download started...');
+  },
+  
+  initFsPlayer: function() {
+    var video = document.getElementById('fsVideoPlayer');
+    var playBtn = document.getElementById('fsPlayPauseBtn');
+    var progressFill = document.getElementById('fsProgressBarFill');
+    var progressTrack = document.getElementById('fsProgressBarTrack');
+    var bufferedBar = document.getElementById('fsBufferedBar');
+    var timeDisplay = document.getElementById('fsTimeDisplay');
+    var muteBtn = document.getElementById('fsMuteBtn');
+    var volumeSlider = document.getElementById('fsVolumeSlider');
+    
+    if (!video) return;
+    
+    var playing = false;
+    var togglePlay = function(e) {
+      e && e.stopPropagation();
+      playing = !playing;
+      playBtn.innerHTML = playing ? '<i class="fas fa-pause">' : '<i class="fas fa-play">';
+      playing ? video.play() : video.pause();
+    };
+    
+    video.addEventListener('timeupdate', function() {
+      if (video.duration) {
+        progressFill.style.width = ((video.currentTime / video.duration) * 100) + '%';
+        timeDisplay.textContent = Utils.formatDuration(video.currentTime) + ' / ' + Utils.formatDuration(video.duration);
+      }
+    });
+    
+    video.addEventListener('progress', function() {
+      if (video.buffered.length > 0 && video.duration)
+        bufferedBar.style.width = ((video.buffered.end(video.buffered.length - 1) / video.duration) * 100) + '%';
+    });
+    
+    video.addEventListener('ended', function() { playing = false; playBtn.innerHTML = '<i class="fas fa-play">'; });
+    
+    playBtn.addEventListener('click', function(e) { e.stopPropagation(); togglePlay(); });
+    video.addEventListener('click', function(e) { e.stopPropagation(); togglePlay(); });
+    
+    progressTrack.addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (video.duration) video.currentTime = (e.offsetX / progressTrack.offsetWidth) * video.duration;
+    });
+    
+    muteBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      video.muted = !video.muted;
+      muteBtn.innerHTML = video.muted ? '<i class="fas fa-volume-mute">' : '<i class="fas fa-volume-up">';
+      volumeSlider.value = video.muted ? 0 : video.volume;
+    });
+    
+    volumeSlider.addEventListener('input', function(e) {
+      video.volume = parseFloat(e.target.value);
+      video.muted = (e.target.value == 0);
+      muteBtn.innerHTML = (e.target.value == 0) ? '<i class="fas fa-volume-mute">' : '<i class="fas fa-volume-up">';
+    });
+  }
+};
+
+// ============================================================
+// FEED MANAGER (FIXED - Shows Titles, Real Usernames, Fake Stats)
+// ============================================================
+var FeedManager = {
+  fetchPosts: async function(reset) {
+    if (State.isLoading) return;
+    if (!reset && !State.hasMorePages) {
+      DOM.endOfFeedMessage.style.display = 'block';
+      return;
     }
     
-  } catch (error) {
-    console.error('Error fetching pins:', error);
-    domElements.skeletonLoader.style.display = 'none';
-    domElements.loadingIndicator.style.display = 'none';
-    ToastNotification.showMessage('Failed to load pins. Please refresh the page.', 'error');
-  } finally {
-    appState.isLoadingData = false;
-  }
-}
-
-function showEndOfContentMessage() {
-  domElements.endOfContentMessage.style.display = 'block';
-  domElements.loadingIndicator.style.display = 'none';
-}
-
-function hideEndOfContentMessage() {
-  domElements.endOfContentMessage.style.display = 'none';
-}
-
-function showEmptyStateMessage() {
-  domElements.pinsGrid.innerHTML = `
-    <div style="grid-column: 1/-1; text-align: center; padding: 4rem 1rem; color: #767676;">
-      <i class="fas fa-inbox" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3; display: block;"></i>
-      <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem; color: #111;">No pins yet</h3>
-      <p style="font-size: 0.9375rem;">Create your first pin to get started!</p>
-    </div>`;
-}
-
-// ==================== FIXED INFINITE SCROLL WITH THROTTLING ====================
-const handleScrollEvent = UtilityHelpers.throttleFunction(() => {
-  // Don't trigger if already loading or no more pages
-  if (appState.isLoadingData || !appState.hasMorePages) return;
-  
-  // Disable scroll listener during modal interactions
-  if (!appState.isScrollListenerActive) return;
-  
-  const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-  const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
-  
-  // Only trigger when near bottom with sufficient threshold
-  if (distanceFromBottom <= APP_CONFIG.SCROLL_THRESHOLD) {
-    // Additional safety check: ensure we're actually scrolling down
-    if (scrollTop > appState.lastScrollPosition) {
-      fetchPinsData(false);
+    if (reset) {
+      DOM.feedContainer.innerHTML = '';
+      State.currentPage = 1;
+      State.hasMorePages = true;
+      DOM.loadingIndicator.style.display = 'none';
+      DOM.endOfFeedMessage.style.display = 'none';
+    } else {
+      DOM.loadingIndicator.style.display = 'flex';
     }
+    
+    State.isLoading = true;
+    
+    try {
+      var response = await fetch(CONFIG.API_ENDPOINT + '/post/all?page=' + State.currentPage, {
+        headers: { 'Authorization': State.token }
+      });
+      
+      if (!response.ok) throw new Error('HTTP ' + response.status);
+      
+      var posts = await response.json();
+      
+      if (!posts || posts.length === 0) {
+        State.hasMorePages = false;
+        if (reset) {
+          DOM.feedContainer.innerHTML = '<div class="empty-state-box"><i class="fas fa-newspaper"></i><h3>No posts yet</h3><p>Create your first post to get started!</p></div>';
+        } else {
+          DOM.endOfFeedMessage.style.display = 'block';
+        }
+        DOM.loadingIndicator.style.display = 'none';
+        State.isLoading = false;
+        return;
+      }
+      
+      var validPosts = posts.filter(function(p) { return p.fileUrl && Utils.isValidUrl(p.fileUrl); });
+      
+      DOM.loadingIndicator.style.display = 'none';
+      
+      var fragment = document.createDocumentFragment();
+      
+      validPosts.forEach(function(post, idx) {
+        var cardId = 'post-' + Date.now() + '-' + idx;
+        var url = Utils.sanitizeUrl(post.fileUrl);
+        
+        // ★★★ GET REAL USERNAME FROM MONGOOSE USER MODEL ★★★
+        // Priority: post.username > post.author > post.userName > userId.username > 'Anonymous'
+        var userName = post.username || 
+                      post.author || 
+                      post.userName || 
+                      (post.userId && typeof post.userId === 'object' ? post.userId.username : null) || 
+                      'Anonymous User';
+        
+        var userId = post.userId && (typeof post.userId === 'object' ? post.userId._id : post.userId);
+        
+        // Check if current user owns this post (for Edit button)
+        var isOwnPost = State.currentUser && (
+          userId === State.currentUser._id || 
+          userId === State.currentUser.id ||
+          userName === State.currentUser.username
+        );
+        
+        // ★★★ POST TITLE (from API) ★★★
+        var title = Utils.escapeHtml(post.title || '');
+        
+        // ★★★ CAPTION (from API) ★★★
+        var caption = Utils.escapeHtml(post.caption || '');
+        
+        var initials = Utils.getInitials(userName);
+        var timeAgo = post.createdAt ? Utils.timeAgo(post.createdAt) : 'Just now';
+        
+        // ★★★ FAKE ENGAGEMENT STATS ★★★
+        var stats = Utils.generateFakeStats();
+        
+        var mediaHTML = '';
+        
+        if (post.type === 'image' && url) {
+          mediaHTML = '<div class="media-box"><img src="' + url + '" alt="' + title + '" class="media-image" loading="lazy" onerror="VideoPlayer.markBroken(document.getElementById(\'' + cardId + '\'),\'' + url + '\')"/></div>';
+        } else if (url) {
+          mediaHTML = '<div class="media-box"><div class="video-player-simple" id="' + cardId + '-player"><video class="video-element-main" src="' + url + '" preload="metadata" muted></video><button class="play-button-center"><i class="fas fa-play"></i></button><div class="controls-overlay"><div class="progress-bar-track"><div class="buffered-indicator"></div><div class="progress-bar-fill"></div></div><div class="controls-row-flex"><div class="controls-group-left"><button class="ctrl-btn"><i class="fas fa-play play-icon-class"></i></button><button class="ctrl-btn mute-btn-class"><i class="fas fa-volume-mute"></i></button><input type="range" class="volume-slider-input" value="0" min="0" max="1" step="0.1"/><span class="time-text-display">0:00 / 0:00</span></div></div></div></div></div>';
+        }
+        
+        var card = document.createElement('article');
+        card.className = 'feed-card';
+        card.id = cardId;
+        card.dataset.postId = post._id || post.id || '';
+        card.dataset.postData = JSON.stringify(post);
+        
+        // ★★★ BUILD CARD HTML WITH ALL FEATURES ★★★
+        var cardHTML = 
+          '<div class="card-header">' +
+            '<div class="card-user-info">' +
+              '<div class="card-avatar">' + initials + '</div>' +
+              '<div class="card-user-meta">' +
+                // ★★★ REAL USERNAME DISPLAYED HERE ★★★
+                '<h3>' + Utils.escapeHtml(userName) + '</h3>' +
+                '<span class="card-time"><i class="fas fa-globe-americas"></i> ' + timeAgo + '</span>' +
+              '</div>' +
+            '</div>' +
+            '<button class="card-more-btn btn-coming-soon" data-feature="More Options"><i class="fas fa-ellipsis-h"></i></button>' +
+          '</div>' +
+          '<div class="card-body">';
+        
+        // ★★★ SHOW POST TITLE IF EXISTS ★★★
+        if (title) {
+          cardHTML += '<h2 class="post-title-text">📌 ' + title + '</h2>';
+        }
+        
+        // ★★★ SHOW CAPTION IF EXISTS ★★★
+        if (caption) {
+          cardHTML += '<p class="card-text">' + caption + '</p>';
+        }
+        
+        // Media
+        cardHTML += mediaHTML + '</div>';
+        
+        // ★★★ EDIT BUTTON (Only for own posts) ★★★
+        if (isOwnPost) {
+          cardHTML += '<button class="edit-post-btn" data-post-id="' + (post._id || post.id) + '" data-post-title="' + title.replace(/"/g, '&quot;') + '" data-post-caption="' + caption.replace(/"/g, '&quot;') + '"><i class="fas fa-edit"></i> Edit Post</button>';
+        }
+        
+        // ★★★ CARD FOOTER WITH FAKE STATS ★★★
+        cardHTML +=
+          '<div class="card-footer">' +
+            '<div class="reaction-stats-row">' +
+              '<div class="reaction-emojis">' +
+                '<span class="reaction-emoji-badge like-badge"><i class="fas fa-thumbs-up"></i></span>' +
+                '<span class="reaction-emoji-badge love-badge"><i class="fas fa-heart"></i></span>' +
+                '<span class="reaction-emoji-badge wow-badge"><i class="fas fa-surprise"></i></span>' +
+              '</div>' +
+              // ★★★ FAKE LIKES/COMMENTS/SHARES ★★★
+              '<span>' + stats.likes + ' likes • ' + stats.comments + ' comments • ' + stats.shares + ' shares</span>' +
+            '</div>' +
+            '<div class="action-buttons-row">' +
+              '<button class="action-btn-card like-btn-card"><i class="far fa-thumbs-up"></i> Like</button>' +
+              // ★★★ COMING SOON BADGES ★★★
+              '<button class="action-btn-card btn-coming-soon" data-feature="Comments"><i class="far fa-comment"></i> Comment <span class="coming-soon-badge">•••</span></button>' +
+              '<button class="action-btn-card btn-coming-soon" data-feature="Share Post"><i class="fas fa-share"></i> Share <span class="coming-soon-badge">•••</span></button>' +
+            '</div>' +
+          '</div>';
+        
+        card.innerHTML = cardHTML;
+        fragment.appendChild(card);
+        
+        // Setup video player if needed
+        if (post.type !== 'image' && url) {
+          requestAnimationFrame(function() { VideoPlayer.setup(cardId); });
+        }
+      });
+      
+      DOM.feedContainer.appendChild(fragment);
+      State.currentPage++;
+      
+      if (validPosts.length < 10) State.hasMorePages = false;
+      
+      // Attach event handlers after DOM insertion
+      this.attachEventHandlers();
+      
+    } catch(err) {
+      console.error('Fetch error:', err);
+      DOM.loadingIndicator.style.display = 'none';
+      Toast.show('Failed to load posts. Please refresh.', 'error');
+    } finally {
+      State.isLoading = false;
+    }
+  },
+  
+  attachEventHandlers: function() {
+    var self = this;
+    
+    // ★★★ EDIT BUTTON HANDLERS ★★★
+    document.querySelectorAll('.edit-post-btn').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var postId = this.getAttribute('data-post-id');
+        var postTitle = this.getAttribute('data-post-title') || '';
+        var postCaption = this.getAttribute('data-post-caption') || '';
+        
+        EditPostModal.open({
+          _id: postId,
+          id: postId,
+          title: postTitle,
+          caption: postCaption
+        });
+      });
+    });
+    
+    // Re-initialize coming soon buttons for dynamically added content
+    ComingSoon.init();
+  }
+};
+
+// ============================================================
+// SCROLL MANAGER
+// ============================================================
+var ScrollManager = {
+  handleScroll: Utils.throttle(function() {
+    if (State.isLoading || !State.hasMorePages || !State.scrollEnabled) return;
+    
+    var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+    var scrollHeight = document.documentElement.scrollHeight;
+    var clientHeight = document.documentElement.clientHeight;
+    var distFromBottom = scrollHeight - scrollTop - clientHeight;
+    
+    if (distFromBottom <= CONFIG.SCROLL_THRESHOLD && scrollTop > State.lastScrollY) {
+      FeedManager.fetchPosts(false);
+    }
+    
+    State.lastScrollY = scrollTop;
+  }, 250),
+  
+  init: function() { window.addEventListener('scroll', this.handleScroll, { passive: true }); },
+  disable: function() { State.scrollEnabled = false; },
+  enable: function() { State.scrollEnabled = true; }
+};
+
+// ============================================================
+// INTERACTION MANAGER (Like Button Toggle)
+// ============================================================
+var InteractionManager = {
+  init: function() {
+    document.addEventListener('click', function(e) {
+      // Like button toggle
+      var likeBtn = e.target.closest('.like-btn-card');
+      if (likeBtn) {
+        likeBtn.classList.toggle('is-liked');
+        if (likeBtn.classList.contains('is-liked')) {
+          likeBtn.innerHTML = '<i class="fas fa-thumbs-up"></i> Liked ❤️';
+        } else {
+          likeBtn.innerHTML = '<i class="far fa-thumbs-up"></i> Like';
+        }
+      }
+    });
+  }
+};
+
+// ============================================================
+// KEYBOARD MANAGER
+// ============================================================
+var KeyboardManager = {
+  init: function() {
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && !State.isUploading) {
+        UploadModal.close();
+        EditPostModal.close();
+        PreviewModal.close();
+        ComingSoon.hide();
+      }
+      
+      if ((e.ctrlKey && e.key === 'k') || (e.key === '/' && !['INPUT','TEXTAREA'].includes(e.target.tagName))) {
+        e.preventDefault();
+        var searchInput = document.querySelector('.search-input-field');
+        if (searchInput) searchInput.focus();
+      }
+    });
+  }
+};
+
+// ============================================================
+// INITIALIZATION
+// ============================================================
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('%c📘 Facebook Clone v5.0 - FIXED & ENHANCED', 'color:#1877F2;font-size:18px;font-weight:bold;');
+  console.log('%c✅ Features Working:', 'color:#31A24C;font-size:13px;font-weight:bold;');
+  console.log('   ✓ Real Username Display (from Mongoose User)');
+  console.log('   ✓ Post Titles Shown Prominently');
+  console.log('   ✓ Edit Post Feature (for own posts)');
+  console.log('   ✓ Fake Likes/Comments/Shares');
+  console.log('   ✓ "•••" Coming Soon Badges on all buttons');
+  console.log('');
+  console.log('%c🔧 Bugs Fixed:', 'color:#E49B0F;font-size:13px;font-weight:bold;');
+  console.log('   ✓ Edit modal opens with correct data');
+  console.log('   ✓ Username displays from database');
+  console.log('   ✓ All coming soon features show modal');
+  
+  // Set demo user if none exists (simulating Mongoose User model)
+  if (!State.currentUser) {
+    State.currentUser = {
+      _id: 'demo-user-' + Date.now(),
+      username: 'Alex Johnson',  // This comes from your Mongoose User model
+      email: 'alex@example.com'
+    };
+    localStorage.setItem('currentUser', JSON.stringify(State.currentUser));
   }
   
-  appState.lastScrollPosition = scrollTop;
-}, 250); // Throttle to maximum once per 250ms
-
-// Use passive event listener for better performance
-window.addEventListener('scroll', handleScrollEvent, { passive: true });
-
-// Disable scroll loading when modals are open
-function disableScrollLoading() {
-  appState.isScrollListenerActive = false;
-}
-
-function enableScrollLoading() {
-  appState.isScrollListenerActive = true;
-}
-
-// Update modal handlers to disable scroll loading
-const originalOpenUploadModal = openUploadModal;
-openUploadModal = function() {
-  disableScrollLoading();
-  originalOpenUploadModal();
-};
-
-const originalCloseUploadModal = closeUploadModal;
-closeUploadModal = function() {
-  originalCloseUploadModal();
-  enableScrollLoading();
-};
-
-const originalOpenPreviewModal = openPreviewModal;
-openPreviewModal = function(url, type, title) {
-  disableScrollLoading();
-  originalOpenPreviewModal(url, type, title);
-};
-
-const originalClosePreviewModal = closePreviewModal;
-closePreviewModal = function() {
-  originalClosePreviewModal();
-  enableScrollLoading();
-};
-
-// ==================== KEYBOARD SHORTCUTS ====================
-document.addEventListener('keydown', (keyboardEvent) => {
-  // ESC to close modals
-  if (keyboardEvent.key === 'Escape' && !appState.isUploadingFile) {
-    closeUploadModal();
-    closePreviewModal();
+  // Set demo token
+  if (!State.token) {
+    State.token = 'demo-token-' + Date.now();
+    localStorage.setItem('token', State.token);
   }
   
-  // Ctrl+K or / to focus search
-  if ((keyboardEvent.ctrlKey && keyboardEvent.key === 'k') || 
-      (keyboardEvent.key === '/' && !['INPUT', 'TEXTAREA'].includes(keyboardEvent.target.tagName))) {
-    keyboardEvent.preventDefault();
-    document.querySelector('.search-input').focus();
-  }
+  // Cache DOM elements FIRST!
+  cacheDOMElements();
+  
+  // Initialize all modules
+  ComingSoon.init();
+  UserManager.init();
+  UploadModal.init();
+  EditPostModal.init();
+  PreviewModal.init();
+  ScrollManager.init();
+  InteractionManager.init();
+  KeyboardManager.init();
+  
+  // Load initial posts
+  FeedManager.fetchPosts(true);
 });
-
-// ==================== APPLICATION INITIALIZATION ====================
-console.log('%c📌 Pinterest Feed v4.0 - Professional Edition', 'color:#E60023;font-size:18px;font-weight:bold;');
-console.log('%c✅ Features: Fixed Infinite Scroll | Enhanced UI/UX | Broken File Detection', 'color:#666;font-size:13px;');
-console.log('%c💡 Debug: Type clearBrokenPinsCache() in console to reset broken file tracking', 'color:#999;font-size:11px;');
-
-// Initial data load
-fetchPinsData(true);
 
 </script>
 </body>
